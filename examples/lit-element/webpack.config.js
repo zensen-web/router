@@ -14,7 +14,7 @@ module.exports = {
   },
   plugins: [
     new HtmlWebpackPlugin({
-      title: 'Nebula',
+      title: 'Lit Example',
       template: './index.tpl.html',
     }),
   ],

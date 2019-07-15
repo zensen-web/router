@@ -29,6 +29,7 @@
     "zen"
   ],
   "dependencies": {
+    "@travistrue2008/zen-router": "^1.0.1",
     "pwa-helpers": "^0.9.1",
     "regexparam": "1.2.1"
   },
