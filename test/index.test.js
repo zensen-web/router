@@ -28,7 +28,7 @@ const ROUTES = [
 const pass = () => true
 const passInput = (params, tail) => ({ tail, params })
 
-function mockHash(route) {
+function mockHash (route) {
   configure({
     useHash: true,
     stubbedLocation: {
@@ -69,8 +69,8 @@ describe.only('router', () => {
         useHash: true,
         stubbedLocation: {
           pathname: '/sub-domain/',
-          hash: `#/users/`,
-        }
+          hash: '#/users/',
+        },
       })
     })
 

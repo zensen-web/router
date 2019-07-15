@@ -29,18 +29,19 @@ const handleRouteChange = () => {
         })
       )
     } else {
-      setRoute(prevRoute)
+      const result = options.useHash ? `/#${prevRoute}` : prevRoute
+      window.history.replaceState({}, '', result)
       window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL))
     }
   }
 }
 
-function getQuerylessRoute (pathTail = '') {
-  const location = pathTail || getRoute()
+function getQuerylessRoute (route = '') {
+  const location = route || getRoute()
   return location.replace(/\?.*/, '')
 }
 
-function __buildParamDict (pattern, keys, querylessRoute) {
+function __buildParams (pattern, keys, querylessRoute) {
   const match = pattern.exec(querylessRoute)
   return keys.reduce(
     (list, key, index) => ({
@@ -52,11 +53,11 @@ function __buildParamDict (pattern, keys, querylessRoute) {
 }
 
 function resolveRoute (pattern, keys, querylessRoute, callback) {
-  const paramDict = __buildParamDict(pattern, keys, querylessRoute)
+  const params = __buildParams(pattern, keys, querylessRoute)
   const reg = new RegExp(pattern)
   const trimmed = querylessRoute.replace(reg, '')
-  const pathTail = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
-  return callback(paramDict, pathTail)
+  const tailRoute = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
+  return callback(params, tailRoute)
 }
 
 export function configure (opts) {
@@ -68,18 +69,18 @@ export function configure (opts) {
   }
 }
 
-export function getParams (path, pathTail = '') {
-  const querylessRoute = getQuerylessRoute(pathTail)
+export function getParams (path, route = '') {
+  const querylessRoute = getQuerylessRoute(route)
   const { pattern, keys } = regexparam(path, true)
 
-  return __buildParamDict(pattern, keys, querylessRoute)
+  return __buildParams(pattern, keys, querylessRoute)
 }
 
-export function getQuerystring (pathTail) {
+export function getQuerystring (route = '') {
   const reg = /.*\?/
-  const route = pathTail || getRoute()
+  const input = route || getRoute()
 
-  return route.replace(reg, '')
+  return input.replace(reg, '')
     .split('&')
     .map(keyValuePair => keyValuePair.split('='))
     .reduce((accum, [key, value]) => ({
@@ -102,11 +103,6 @@ export function getRoute () {
 }
 
 export function setRoute (route) {
-  const result = options.useHash ? `/#${route}` : route
-  window.history.replaceState({}, '', result)
-}
-
-export function pushRoute (route) {
   prevRoute = getRoute()
 
   const result = options.useHash ? `/#${route}` : route
@@ -114,18 +110,18 @@ export function pushRoute (route) {
   handleRouteChange()
 }
 
-export function matchRoute (path, callback, pathTail = '', exact = true) {
-  const querylessRoute = getQuerylessRoute(pathTail)
+export function matchRoute (path, callback, route = '', exact = true) {
+  const querylessRoute = getQuerylessRoute(route)
   const { pattern, keys } = regexparam(path, !exact)
   const match = pattern.test(querylessRoute)
 
   return match ? resolveRoute(pattern, keys, querylessRoute, callback) : ''
 }
 
-export function matchRouteSwitch (items, pathTail = '') {
+export function matchRouteSwitch (items, route = '') {
   let result = {}
 
-  const querylessRoute = getQuerylessRoute(pathTail)
+  const querylessRoute = getQuerylessRoute(route)
   const matchedRoute = items.find(item => {
     const exact = typeof item.exact !== 'undefined' ? item.exact : true
     result = regexparam(item.path, !exact)

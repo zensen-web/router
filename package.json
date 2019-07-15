@@ -2,7 +2,7 @@
   "name": "lit-example",
   "version": "1.0.0",
   "license": "MIT",
-  "description": "A router for native web components",
+  "description": "A declarative router for native web components",
   "unpkg": "dist/index.min.js",
   "module": "dist/index.mjs",
   "main": "dist/index.js",
