@@ -1,11 +1,9 @@
 {
-  "name": "lit-example",
-  "version": "1.0.0",
+  "name": "@travistrue2008/zen-router",
+  "version": "1.0.1",
   "license": "MIT",
   "description": "A declarative router for native web components",
-  "unpkg": "dist/index.min.js",
-  "module": "dist/index.mjs",
-  "main": "dist/index.js",
+  "main": "src/index.js",
   "author": {
     "name": "Travis True",
     "email": "travis.true08@gmail.com",
@@ -16,12 +14,20 @@
     "url": "https://github.com/travistrue2008/zen-router.git"
   },
   "engines": {
-    "node": ">=8"
+    "node": ">=8.5"
   },
   "scripts": {
     "test": "karma start --single-run --browsers ChromeHeadless",
     "test:watch": "karma start --browsers ChromeHeadless --auto-watch --single-run=false"
   },
+  "keywords": [
+    "component",
+    "declarative",
+    "route",
+    "router",
+    "routing",
+    "zen"
+  ],
   "dependencies": {
     "pwa-helpers": "^0.9.1",
     "regexparam": "1.2.1"
