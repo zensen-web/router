@@ -102,7 +102,7 @@ export function getRoute () {
   return options.useHash ? hash.replace('#', '') : `${pathname}${hash}`
 }
 
-export function setRoute (route) {
+export function navigate (route) {
   prevRoute = getRoute()
 
   const result = options.useHash ? `/#${route}` : route

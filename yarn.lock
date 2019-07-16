@@ -668,13 +668,6 @@
   version "0.7.1"
   resolved "https://registry.yarnpkg.com/@sinonjs/text-encoding/-/text-encoding-0.7.1.tgz#8da5c6530915653f3a1f38fd5f101d8c3f8079c5"
 
-"@travistrue2008/zen-router@^1.0.1":
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/@travistrue2008/zen-router/-/zen-router-1.0.1.tgz#181ece47108df3fd710d0bb4086bb4318a8da46a"
-  dependencies:
-    pwa-helpers "^0.9.1"
-    regexparam "1.2.1"
-
 "@types/chai@^4.1.7":
   version "4.1.7"
   resolved "https://registry.yarnpkg.com/@types/chai/-/chai-4.1.7.tgz#1b8e33b61a8c09cbe1f85133071baa0dbf9fa71a"
@@ -700,8 +693,8 @@
   resolved "https://registry.yarnpkg.com/@types/mocha/-/mocha-5.2.7.tgz#315d570ccb56c53452ff8638738df60726d5b6ea"
 
 "@types/node@*":
-  version "12.6.2"
-  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.2.tgz#a5ccec6abb6060d5f20d256fb03ed743e9774999"
+  version "12.6.3"
+  resolved "https://registry.yarnpkg.com/@types/node/-/node-12.6.3.tgz#44d507c5634f85e7164707ca36bba21b5213d487"
 
 "@types/node@^11.13.0":
   version "11.13.17"
@@ -2255,8 +2248,8 @@ eslint-plugin-import@^2.17.1:
     resolve "^1.11.0"
 
 eslint-plugin-jest@^22.4.1:
-  version "22.7.2"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.7.2.tgz#7ab118a66a34e46ae5e16a128b5d24fd28b43dca"
+  version "22.8.0"
+  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.8.0.tgz#242ef5459e8da25d2c41438e95eb546e03d7fae1"
 
 eslint-plugin-no-only-tests@^2.3.0:
   version "2.3.1"

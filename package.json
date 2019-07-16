@@ -1,17 +1,13 @@
 {
   "name": "@travistrue2008/zen-router",
-  "version": "1.0.1",
+  "version": "1.0.2",
   "license": "MIT",
   "description": "A declarative router for native web components",
   "main": "src/index.js",
-  "author": {
-    "name": "Travis True",
-    "email": "travis.true08@gmail.com",
-    "url": "http://travistrue.io"
-  },
+  "author": "Travis True <travis.true08@gmail.com> (http://www.travistrue.io)",
   "repository": {
     "type": "git",
-    "url": "https://github.com/travistrue2008/zen-router.git"
+    "url": "git+https://github.com/travistrue2008/zen-router.git"
   },
   "engines": {
     "node": ">=8.5"
@@ -29,7 +25,6 @@
     "zen"
   ],
   "dependencies": {
-    "@travistrue2008/zen-router": "^1.0.1",
     "pwa-helpers": "^0.9.1",
     "regexparam": "1.2.1"
   },
