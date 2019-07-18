@@ -131,13 +131,14 @@ Matching against a route
 import { matchRoute } from '@travistrue2008/zen-router'
 
 // Example window URL:
-// http://www.my-domain.com/#/users/123/photos/456
+// http://www.my-domain.com/#/users/123/photos/456?filter=upload-date&sort=asc
 const result = matchRoute(
   '/users/:id/',
-  ({ id }, tail) =>
-    `
-    <p>User: ${id}</p>
+  (tail, { querystring, params }) => `
     <p>Tail URL: ${tail}</p>
+    <p>User: ${params.id}</p>
+    <p>Filter: ${querystring.filter}</p>
+    <p>Sort: ${querystring.sort}</p>
   `,
   '', // do not explicity provide a route, so that it uses window.location
   false // set to false to allow routes to be longer than paths it's matched against
@@ -147,6 +148,8 @@ const result = matchRoute(
   Result:
     <p>User: 123</p>
     <p>Tail URL: /photos/456</p>
+    <p>Filter: upload</p>
+    <p>Sort: asc</p>
  */
 ```
 
@@ -155,7 +158,7 @@ import { matchRoute } from '@travistrue2008/zen-router'
 
 const result = matchRoute(
   '/photos/:id/',
-  ({ id }, tail) =>
+  (tail, { id }) =>
     `
     <p>Photo: ${id}</p>
     <p>Tail URL: ${tail}</p>
@@ -176,13 +179,13 @@ Matching against multiple possible routes
 const items = [
   {
     path: '/users/',
-    resolver: (_params, tail) => `
+    resolver: tail => `
       <p>Tail Route: ${tail}</p>
     `
   },
   {
     path: '/photos/',
-    resolver: (_params, tail) => `
+    resolver: tail => `
       <p>Tail Route: ${tail}</p>
     `
   },
