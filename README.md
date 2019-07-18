@@ -36,6 +36,8 @@ Getting routes with the following window URL:
 `http://www.my-domain.com/sub-route/#/users/123/photos/456`
 
 ```js
+import { getRoute } from '@travistrue2008/zen-router'
+
 // hash-routing enabled
 const route = getRoute() //  /users/123/photos/456
 
@@ -46,6 +48,8 @@ const route = getRoute() //  /sub-route/#/users/123/photos/456
 Navigating to a different route
 
 ```js
+import { navigate } from '@travistrue2008/zen-router'
+
 // hash-routing enabled
 navigate('/users/123') // http://www.my-domain.com/#/users/123
 
@@ -56,6 +60,8 @@ navigate('/users/123') // http://www.my-domain.com/users/123
 Getting route params
 
 ```js
+import { getParams } from '@travistrue2008/zen-router'
+
 // Example window URL:
 // http://www.my-domain.com/#/users/123/photos/456
 const { userId, photoId } = getParams('/users/:userId/photos/:photoId')
@@ -72,6 +78,8 @@ const { userId, photoId } = getParams(
 Getting querystring params
 
 ```js
+import { getQuerystring } from '@travistrue2008/zen-router'
+
 // Example window URL:
 // http://www.my-domain.com?search=asdf&sort=asc
 const { search, sort } = getQuerystring()
@@ -87,6 +95,8 @@ const { search, sort } = getQuerystring(
 Detecting route changes
 
 ```js
+import { EVENT_ROuTE_CHANGE } from '@travistrue2008/zen-router'
+
 window.addEventListener(EVENT_ROUTE_CHANGE, e =>
   console.info('changing route:', e.detail)
 )
@@ -95,6 +105,8 @@ window.addEventListener(EVENT_ROUTE_CHANGE, e =>
 Canceling route changes
 
 ```js
+import { EVENT_ROUTE_SHOULD_CHANGE } from '@travistrue2008/zen-router'
+
 window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, e => {
   // block all route changes to /users/
   if (e.detail === '/users/') {
@@ -106,6 +118,8 @@ window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, e => {
 Detecting when route changes are canceled
 
 ```js
+import { EVENT_ROUTE_CANCEL } from '@travistrue2008/zen-router'
+
 window.addEventListener(EVENT_ROUTE_CANCEL, e =>
   console.info('route change canceled:', e.detail)
 )
@@ -114,6 +128,8 @@ window.addEventListener(EVENT_ROUTE_CANCEL, e =>
 Matching against a route
 
 ```js
+import { matchRoute } from '@travistrue2008/zen-router'
+
 // Example window URL:
 // http://www.my-domain.com/#/users/123/photos/456
 const result = matchRoute(
@@ -135,6 +151,8 @@ const result = matchRoute(
 ```
 
 ```js
+import { matchRoute } from '@travistrue2008/zen-router'
+
 const result = matchRoute(
   '/photos/:id/',
   ({ id }, tail) =>
@@ -176,6 +194,8 @@ const items = [
 ```
 
 ```js
+import { matchRouteSwitch } from '@travistrue2008/zen-router'
+
 // Example window URL:
 // http://www.my-domain.com/#/users/123
 const result = matchRouteSwitch(items)
@@ -187,6 +207,8 @@ const result = matchRouteSwitch(items)
 ```
 
 ```js
+import { matchRouteSwitch } from '@travistrue2008/zen-router'
+
 // Example window URL:
 // http://www.my-domain.com/#/photos/456
 const result = matchRouteSwitch(items)
