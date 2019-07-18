@@ -95,7 +95,7 @@ const { search, sort } = getQuerystring(
 Detecting route changes
 
 ```js
-import { EVENT_ROuTE_CHANGE } from '@travistrue2008/zen-router'
+import { EVENT_ROUTE_CHANGE } from '@travistrue2008/zen-router'
 
 window.addEventListener(EVENT_ROUTE_CHANGE, e =>
   console.info('changing route:', e.detail)
