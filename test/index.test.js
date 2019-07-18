@@ -38,7 +38,7 @@ function mockHash (route) {
   })
 }
 
-describe.only('router', () => {
+describe('router', () => {
   let sandbox, changeStub
 
   beforeEach(() => {
@@ -110,20 +110,40 @@ describe.only('router', () => {
         mockHash('/users/123/')
       })
 
-      it('does not render the non-matching route', () =>
-        expect(matchRoute('/nonsense/', pass)).to.eq(''))
-
-      it('renders the route', () =>
+      it('renders', () =>
         expect(matchRoute('/users/123/', pass)).to.be.true)
 
-      it('renders the route with params', () =>
+      it('fails against non-matching route', () =>
+        expect(matchRoute('/nonsense/', pass)).to.eq(''))
+
+      it('renders with params', () =>
         expect(matchRoute('/users/:id/', passInput)).to.deep.eq({
           tail: '/',
           params: { id: '123' },
         }))
 
-      it('does not render routes that are longer than pattern', () =>
+      it('fails with routes that are longer than pattern', () =>
         expect(matchRoute('/users/', passInput)).to.eq(''))
+
+      context('when a route is provided', () => {
+        it('renders', () =>
+          expect(matchRoute('/users/123/', pass, '/users/123')).to.be.true)
+
+        it('renders with trailing slash', () =>
+          expect(matchRoute('/users/123/', pass, '/users/123/')).to.be.true)
+
+        it('renders with hash in provided route', () =>
+          expect(matchRoute('/users/123/', pass, '#/users/123')).to.be.true)
+
+        it('renders with hash in path', () =>
+          expect(matchRoute('#/users/123/', pass, '/users/123')).to.be.true)
+
+        it('renders with hash in both the path and provided route', () =>
+          expect(matchRoute('#/users/123/', pass, '#/users/123')).to.be.true)
+
+        it('renders with hash in path and pattern, but not in front', () =>
+          expect(matchRoute('/users/#123/', pass, '/users/#123')).to.be.true)
+      })
     })
 
     context('when extended', () => {
@@ -131,7 +151,7 @@ describe.only('router', () => {
         mockHash('/users/123/')
       })
 
-      it('renders the route along with a tail route', () =>
+      it('renders along with a tail route', () =>
         expect(matchRoute('/users/', passInput, '', false)).to.deep.eq({
           tail: '/123/',
           params: {},
@@ -140,13 +160,37 @@ describe.only('router', () => {
       context('when the tail is used as an input', () => {
         const TAIL_1 = '/123/photos/456/'
 
-        it('renders the route along the new, smaller tail', () =>
+        it('renders along the new, smaller tail', () =>
           expect(
             matchRoute('/:userId/photos', passInput, TAIL_1, false)
           ).to.deep.eq({
             tail: '/456/',
             params: { userId: '123' },
           }))
+      })
+
+      context('when the route does not have a trailing slash', () => {
+        beforeEach(() => {
+          mockHash('/users/123')
+        })
+
+        it('renders against path with no trailing slash', () =>
+          expect(matchRoute('/users/123', pass, '', false)).to.true)
+
+        it('renders against path with trailing slash', () =>
+          expect(matchRoute('/users/123/', pass, '', false)).to.true)
+      })
+
+      context('when an otherwise matching route has extra characters', () => {
+        beforeEach(() => {
+          mockHash('/users/123sss')
+        })
+
+        it('fail against path with no trailing slash', () =>
+          expect(matchRoute('/users/123', pass, '', false)).to.eq(''))
+
+        it('fails against path with trailing slash', () =>
+          expect(matchRoute('/users/123/', pass, '', false)).to.eq(''))
       })
     })
   })

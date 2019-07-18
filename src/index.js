@@ -36,8 +36,14 @@ const handleRouteChange = () => {
   }
 }
 
+function sanitizeRoute (route) {
+  return options.useHash && route.charAt(0) === '#'
+    ? route.replace('#', '')
+    : route
+}
+
 function getQuerylessRoute (route = '') {
-  const location = route || getRoute()
+  const location = sanitizeRoute(route) || getRoute()
   return location.replace(/\?.*/, '')
 }
 
@@ -105,14 +111,15 @@ export function getRoute () {
 export function navigate (route) {
   prevRoute = getRoute()
 
-  const result = options.useHash ? `/#${route}` : route
+  const result = options.useHash ? `/#${sanitizeRoute(route)}` : route
   window.history.pushState({}, '', result)
   handleRouteChange()
 }
 
 export function matchRoute (path, callback, route = '', exact = true) {
   const querylessRoute = getQuerylessRoute(route)
-  const { pattern, keys } = regexparam(path, !exact)
+  const sanitizedPath = sanitizeRoute(path)
+  const { pattern, keys } = regexparam(sanitizedPath, !exact)
   const match = pattern.test(querylessRoute)
 
   return match ? resolveRoute(pattern, keys, querylessRoute, callback) : ''
