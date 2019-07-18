@@ -58,12 +58,16 @@ function __buildParams (pattern, keys, querylessRoute) {
   )
 }
 
-function resolveRoute (pattern, keys, querylessRoute, callback) {
-  const params = __buildParams(pattern, keys, querylessRoute)
+function resolveRoute (pattern, keys, querylessRoute, querystring, callback) {
+  const ctx = {
+    querystring,
+    params: __buildParams(pattern, keys, querylessRoute),
+  }
+
   const reg = new RegExp(pattern)
   const trimmed = querylessRoute.replace(reg, '')
   const tailRoute = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
-  return callback(params, tailRoute)
+  return callback(tailRoute, ctx)
 }
 
 export function configure (opts) {
@@ -86,13 +90,15 @@ export function getQuerystring (route = '') {
   const reg = /.*\?/
   const input = route || getRoute()
 
-  return input.replace(reg, '')
-    .split('&')
-    .map(keyValuePair => keyValuePair.split('='))
-    .reduce((accum, [key, value]) => ({
-      ...accum,
-      [key]: value || true,
-    }), {})
+  return input.indexOf('?') !== -1
+    ? input.replace(reg, '')
+      .split('&')
+      .map(keyValuePair => keyValuePair.split('='))
+      .reduce((accum, [key, value]) => ({
+        ...accum,
+        [key]: value || true,
+      }), {})
+    : {}
 }
 
 /*
@@ -117,17 +123,19 @@ export function navigate (route) {
 }
 
 export function matchRoute (path, callback, route = '', exact = true) {
+  const querystring = getQuerystring(route)
   const querylessRoute = getQuerylessRoute(route)
   const sanitizedPath = sanitizeRoute(path)
   const { pattern, keys } = regexparam(sanitizedPath, !exact)
-  const match = pattern.test(querylessRoute)
-
-  return match ? resolveRoute(pattern, keys, querylessRoute, callback) : ''
+  return pattern.test(querylessRoute)
+    ? resolveRoute(pattern, keys, querylessRoute, querystring, callback)
+    : ''
 }
 
 export function matchRouteSwitch (items, route = '') {
   let result = {}
 
+  const querystring = getQuerystring(route)
   const querylessRoute = getQuerylessRoute(route)
   const matchedRoute = items.find(item => {
     const exact = typeof item.exact !== 'undefined' ? item.exact : true
@@ -137,7 +145,7 @@ export function matchRouteSwitch (items, route = '') {
 
   const { pattern, keys } = result
   return matchedRoute
-    ? resolveRoute(pattern, keys, querylessRoute, matchedRoute.resolver)
+    ? resolveRoute(pattern, keys, querylessRoute, querystring, matchedRoute.resolver)
     : ''
 }
 

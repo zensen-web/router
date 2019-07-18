@@ -26,7 +26,7 @@ const ROUTES = [
 ]
 
 const pass = () => true
-const passInput = (params, tail) => ({ tail, params })
+const passInput = (tail, ctx) => ({ tail, ctx })
 
 function mockHash (route) {
   configure({
@@ -102,6 +102,10 @@ describe('router', () => {
         offset: '4',
       })
     })
+
+    it('returns nothing', () => {
+      expect(getQuerystring('/users')).to.deep.eq({})
+    })
   })
 
   context('matchRoute()', () => {
@@ -119,7 +123,10 @@ describe('router', () => {
       it('renders with params', () =>
         expect(matchRoute('/users/:id/', passInput)).to.deep.eq({
           tail: '/',
-          params: { id: '123' },
+          ctx: {
+            params: { id: '123' },
+            querystring: {},
+          },
         }))
 
       it('fails with routes that are longer than pattern', () =>
@@ -154,7 +161,10 @@ describe('router', () => {
       it('renders along with a tail route', () =>
         expect(matchRoute('/users/', passInput, '', false)).to.deep.eq({
           tail: '/123/',
-          params: {},
+          ctx: {
+            params: {},
+            querystring: {},
+          },
         }))
 
       context('when the tail is used as an input', () => {
@@ -165,7 +175,10 @@ describe('router', () => {
             matchRoute('/:userId/photos', passInput, TAIL_1, false)
           ).to.deep.eq({
             tail: '/456/',
-            params: { userId: '123' },
+            ctx: {
+              params: { userId: '123' },
+              querystring: {},
+            },
           }))
       })
 
