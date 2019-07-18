@@ -137,7 +137,7 @@ export function matchRouteSwitch (items, route = '') {
 
   const { pattern, keys } = result
   return matchedRoute
-    ? resolveRoute(pattern, keys, querylessRoute, matchedRoute.renderer)
+    ? resolveRoute(pattern, keys, querylessRoute, matchedRoute.resolver)
     : ''
 }
 

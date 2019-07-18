@@ -91,7 +91,7 @@ class App extends LitElement {
         label: 'Home',
         path: '/home/',
         href: '#/home',
-        renderer: () => html`
+        resolver: () => html`
           <p>Home</p>
         `,
       },
@@ -100,7 +100,7 @@ class App extends LitElement {
         label: 'About Us',
         path: '/about/',
         href: '#/about',
-        renderer: () => html`
+        resolver: () => html`
           <p>About Us</p>
         `,
       },

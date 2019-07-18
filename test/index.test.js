@@ -17,11 +17,11 @@ import {
 const ROUTES = [
   {
     path: '/',
-    renderer: () => 0,
+    resolver: () => 0,
   },
   {
     path: '/users/',
-    renderer: () => 1,
+    resolver: () => 1,
   },
 ]
 

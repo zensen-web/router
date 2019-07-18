@@ -176,19 +176,19 @@ Matching against multiple possible routes
 const items = [
   {
     path: '/users/',
-    renderer: (_params, tail) => `
+    resolver: (_params, tail) => `
       <p>Tail Route: ${tail}</p>
     `
   },
   {
     path: '/photos/',
-    renderer: (_params, tail) => `
+    resolver: (_params, tail) => `
       <p>Tail Route: ${tail}</p>
     `
   },
   {
     path: '/',
-    renderer: () => `<p>404 - Not Found</p>`
+    resolver: () => `<p>404 - Not Found</p>`
   }
 ]
 ```
