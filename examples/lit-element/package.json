@@ -5,7 +5,7 @@
     "serve": "rm -rf ./dist && yarn build && webpack-dev-server --config=webpack.config.js"
   },
   "dependencies": {
-    "@travistrue2008/zen-router": "^1.0.1",
+    "@travistrue2008/zen-router": "^2.0.0",
     "lit-element": "^2.2.0",
     "lit-html": "^1.1.1"
   },

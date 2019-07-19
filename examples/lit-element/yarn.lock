@@ -16,6 +16,13 @@
   version "3.0.0-pre.21"
   resolved "https://registry.yarnpkg.com/@polymer/test-fixture/-/test-fixture-3.0.0-pre.21.tgz#85152207cb0bf57caebc191c80bb0fdb6952614e"
 
+"@travistrue2008/zen-router@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@travistrue2008/zen-router/-/zen-router-2.0.0.tgz#cfd2862591ea309fd0c8252d2f90602f62835b7d"
+  dependencies:
+    pwa-helpers "^0.9.1"
+    regexparam "1.2.1"
+
 "@types/events@*":
   version "3.0.0"
   resolved "https://registry.yarnpkg.com/@types/events/-/events-3.0.0.tgz#2862f3f58a9a7f7c3e78d79f130dd4d71c25c2a7"
@@ -2855,6 +2862,10 @@ punycode@^2.1.0:
   version "2.1.1"
   resolved "https://registry.yarnpkg.com/punycode/-/punycode-2.1.1.tgz#b58b010ac40c22c5657616c8d2c2c02c7bf479ec"
 
+pwa-helpers@^0.9.1:
+  version "0.9.1"
+  resolved "https://registry.yarnpkg.com/pwa-helpers/-/pwa-helpers-0.9.1.tgz#9ea22fa1996ab97df73b276cae962621c3fd2532"
+
 qs@6.7.0:
   version "6.7.0"
   resolved "https://registry.yarnpkg.com/qs/-/qs-6.7.0.tgz#41dc1a015e3d581f1621776be31afb2876a9b1bc"
@@ -2940,6 +2951,10 @@ regex-not@^1.0.0, regex-not@^1.0.2:
   dependencies:
     extend-shallow "^3.0.2"
     safe-regex "^1.1.0"
+
+regexparam@1.2.1:
+  version "1.2.1"
+  resolved "https://registry.yarnpkg.com/regexparam/-/regexparam-1.2.1.tgz#cc2a50a987efacd328de8fa4989e3a919e6e3bab"
 
 relateurl@0.2.x:
   version "0.2.7"
