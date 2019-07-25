@@ -2247,10 +2247,6 @@ eslint-plugin-import@^2.17.1:
     read-pkg-up "^2.0.0"
     resolve "^1.11.0"
 
-eslint-plugin-jest@^22.4.1:
-  version "22.8.0"
-  resolved "https://registry.yarnpkg.com/eslint-plugin-jest/-/eslint-plugin-jest-22.8.0.tgz#242ef5459e8da25d2c41438e95eb546e03d7fae1"
-
 eslint-plugin-no-only-tests@^2.3.0:
   version "2.3.1"
   resolved "https://registry.yarnpkg.com/eslint-plugin-no-only-tests/-/eslint-plugin-no-only-tests-2.3.1.tgz#7b24a4df55b818d0838410aa96b24a5a4a072262"

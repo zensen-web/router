@@ -122,6 +122,14 @@ export function navigate (route) {
   handleRouteChange()
 }
 
+export function redirect (route) {
+  prevRoute = getRoute()
+
+  const result = options.useHash ? `/#${sanitizeRoute(route)}` : route
+  window.history.replaceState({}, '', result)
+  handleRouteChange()
+}
+
 export function matchRoute (path, callback, route = '', exact = true) {
   const querystring = getQuerystring(route)
   const querylessRoute = getQuerylessRoute(route)

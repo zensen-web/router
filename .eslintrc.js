@@ -7,7 +7,7 @@ module.exports = {
     sourceType: 'module'
   },
   extends: ['standard'],
-  plugins: ['standard', 'promise', 'jest'],
+  plugins: ['standard', 'promise'],
   rules: {
     'new-cap': [
       'warn',
@@ -15,8 +15,9 @@ module.exports = {
         capIsNew: true
       }
     ],
-    camelcase: 0,
+    'camelcase': 0,
     'comma-dangle': ['error', 'always-multiline'],
+    'eol-last': ['error', 'always'],
     'import/extensions': [
       'error',
       'always',
@@ -53,7 +54,9 @@ module.exports = {
     'no-var': ['error'],
     'prefer-const': ['error'],
     'prefer-template': ['error'],
-    quotes: [2, 'single', { avoidEscape: true }],
-    'require-await': ['error']
+    'quotes': [2, 'single', { avoidEscape: true }],
+    'require-await': ['error'],
+    'semi': [2, 'never'],
+    'space-before-function-paren': ['error', 'always'],
   }
-};
+}
