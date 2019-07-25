@@ -14,7 +14,7 @@
   },
   "scripts": {
     "test": "karma start --single-run --browsers HeadlessChromium",
-    "test:watch": "karma start --browsers ChromeHeadless --auto-watch --single-run=false"
+    "test:watch": "karma start --browsers HeadlessChromium --auto-watch --single-run=false"
   },
   "keywords": [
     "component",
