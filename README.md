@@ -57,6 +57,20 @@ navigate('/users/123') // http://www.my-domain.com/#/users/123
 navigate('/users/123') // http://www.my-domain.com/users/123
 ```
 
+Redirecting to a different route
+
+_Note: This is just like navigate(), except it doesn't push to the browser's history._
+
+```js
+import { redirect } from '@travistrue2008/zen-router'
+
+// hash-routing enabled
+redirect('/users/123') // http://www.my-domain.com/#/users/123
+
+// hash-routing disabled
+redirect('/users/123') // http://www.my-domain.com/users/123
+```
+
 Getting route params
 
 ```js
