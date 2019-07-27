@@ -1,4 +1,4 @@
-# zen-router
+# zensen-router
 
 A declarative router for native web components.
 
@@ -14,13 +14,13 @@ A declarative router for native web components.
 Using `npm`:
 
 ```
-$ npm install @travistrue2008/zen-router
+$ npm install @zensen/router
 ```
 
 Using `yarn`:
 
 ```
-$ yarn add @travistrue2008/zen-router
+$ yarn add @zensen/router
 ```
 
 ## API
@@ -36,7 +36,7 @@ Getting routes with the following window URL:
 `http://www.my-domain.com/sub-route/#/users/123/photos/456`
 
 ```js
-import { getRoute } from '@travistrue2008/zen-router'
+import { getRoute } from '@zensen/router'
 
 // hash-routing enabled
 const route = getRoute() //  /users/123/photos/456
@@ -48,7 +48,7 @@ const route = getRoute() //  /sub-route/#/users/123/photos/456
 Navigating to a different route
 
 ```js
-import { navigate } from '@travistrue2008/zen-router'
+import { navigate } from '@zensen/router'
 
 // hash-routing enabled
 navigate('/users/123') // http://www.my-domain.com/#/users/123
@@ -62,7 +62,7 @@ Redirecting to a different route
 _Note: This is just like navigate(), except it doesn't push to the browser's history._
 
 ```js
-import { redirect } from '@travistrue2008/zen-router'
+import { redirect } from '@zensen/router'
 
 // hash-routing enabled
 redirect('/users/123') // http://www.my-domain.com/#/users/123
@@ -74,7 +74,7 @@ redirect('/users/123') // http://www.my-domain.com/users/123
 Getting route params
 
 ```js
-import { getParams } from '@travistrue2008/zen-router'
+import { getParams } from '@zensen/router'
 
 // Example window URL:
 // http://www.my-domain.com/#/users/123/photos/456
@@ -92,7 +92,7 @@ const { userId, photoId } = getParams(
 Getting querystring params
 
 ```js
-import { getQuerystring } from '@travistrue2008/zen-router'
+import { getQuerystring } from '@zensen/router'
 
 // Example window URL:
 // http://www.my-domain.com?search=asdf&sort=asc
@@ -109,7 +109,7 @@ const { search, sort } = getQuerystring(
 Detecting route changes
 
 ```js
-import { EVENT_ROUTE_CHANGE } from '@travistrue2008/zen-router'
+import { EVENT_ROUTE_CHANGE } from '@zensen/router'
 
 window.addEventListener(EVENT_ROUTE_CHANGE, e =>
   console.info('changing route:', e.detail)
@@ -119,7 +119,7 @@ window.addEventListener(EVENT_ROUTE_CHANGE, e =>
 Canceling route changes
 
 ```js
-import { EVENT_ROUTE_SHOULD_CHANGE } from '@travistrue2008/zen-router'
+import { EVENT_ROUTE_SHOULD_CHANGE } from '@zensen/router'
 
 window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, e => {
   // block all route changes to /users/
@@ -132,7 +132,7 @@ window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, e => {
 Detecting when route changes are canceled
 
 ```js
-import { EVENT_ROUTE_CANCEL } from '@travistrue2008/zen-router'
+import { EVENT_ROUTE_CANCEL } from '@zensen/router'
 
 window.addEventListener(EVENT_ROUTE_CANCEL, e =>
   console.info('route change canceled:', e.detail)
@@ -142,7 +142,7 @@ window.addEventListener(EVENT_ROUTE_CANCEL, e =>
 Matching against a route
 
 ```js
-import { matchRoute } from '@travistrue2008/zen-router'
+import { matchRoute } from '@zensen/router'
 
 // Example window URL:
 // http://www.my-domain.com/#/users/123/photos/456?filter=upload-date&sort=asc
@@ -168,7 +168,7 @@ const result = matchRoute(
 ```
 
 ```js
-import { matchRoute } from '@travistrue2008/zen-router'
+import { matchRoute } from '@zensen/router'
 
 const result = matchRoute(
   '/photos/:id/',
@@ -211,7 +211,7 @@ const items = [
 ```
 
 ```js
-import { matchRouteSwitch } from '@travistrue2008/zen-router'
+import { matchRouteSwitch } from '@zensen/router'
 
 // Example window URL:
 // http://www.my-domain.com/#/users/123
@@ -224,7 +224,7 @@ const result = matchRouteSwitch(items)
 ```
 
 ```js
-import { matchRouteSwitch } from '@travistrue2008/zen-router'
+import { matchRouteSwitch } from '@zensen/router'
 
 // Example window URL:
 // http://www.my-domain.com/#/photos/456
