@@ -1,4 +1,4 @@
-import { matchRouteSwitch, EVENT_ROUTE_CHANGE } from '@travistrue2008/zen-router'
+import { matchRouteSwitch, EVENT_ROUTE_CHANGE } from '../../../../src'
 
 import {
   LitElement,
@@ -62,7 +62,7 @@ class App extends LitElement {
   }
 
   __initState () {
-    this.__route = ''
+    this.__route = window.location.hash
     this.__navItems = this.genNavItems()
   }
 
@@ -104,6 +104,13 @@ class App extends LitElement {
           <p>About Us</p>
         `,
       },
+      {
+        exact: false,
+        path: '/',
+        resolver: () => html`
+          <p>Not Found</p>
+        `,
+      },
     ]
   }
 
@@ -111,7 +118,7 @@ class App extends LitElement {
     return html`
       <div class="container">
         <nav class="nav">
-          ${this.__navItems.map(item => html`
+          ${this.__navItems.slice(0, -1).map(item => html`
             <a
               class="nav-item"
               href="${item.href}"
