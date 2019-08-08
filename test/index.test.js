@@ -1,6 +1,6 @@
 import sinon from 'sinon'
 
-import { expect } from 'chai'
+import { expect } from '@open-wc/testing'
 
 import {
   EVENT_ROUTE_CHANGE,
