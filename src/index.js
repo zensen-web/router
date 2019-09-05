@@ -114,6 +114,11 @@ export function getRoute () {
   return options.useHash ? hash.replace('#', '') : `${pathname}${hash}`
 }
 
+export function syncRoute (prev) {
+  prevRoute = prev
+  handleRouteChange()
+}
+
 export function navigate (route) {
   prevRoute = getRoute()
 

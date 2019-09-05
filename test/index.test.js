@@ -9,6 +9,7 @@ import {
   configure,
   getParams,
   getRoute,
+  syncRoute,
   matchRoute,
   matchRouteSwitch,
   getQuerystring,
@@ -63,6 +64,27 @@ describe('router', () => {
       }))
   })
 
+  context('syncRoute()', () => {
+    const ROUTE_USERS = '/users'
+    const ROUTE_STORIES = '/stories'
+
+    beforeEach(() => {
+      syncRoute(ROUTE_USERS, ROUTE_STORIES)
+    })
+
+    it('invokes routechange event', () =>
+      expect(changeStub.calledOnce).to.be.true)
+
+    context('when setting to current route', () => {
+      beforeEach(() => {
+        syncRoute(ROUTE_USERS, ROUTE_USERS)
+      })
+
+      it('does not invoke routechange event', () =>
+        expect(changeStub.calledOnce).to.be.false)
+    })
+  })
+
   context('getRoute()', () => {
     beforeEach(() => {
       configure({
@@ -74,12 +96,10 @@ describe('router', () => {
       })
     })
 
-    context('when useHash is set', () => {
-      it('only reports the hash', () => expect(getRoute()).to.be.eq('/users/'))
+    it('only reports the hash', () => expect(getRoute()).to.be.eq('/users/'))
 
-      it('invokes routechange event', () =>
-        expect(changeStub.calledOnce).to.be.true)
-    })
+    it('invokes routechange event', () =>
+      expect(changeStub.calledOnce).to.be.true)
 
     context('when useHash is NOT set', () => {
       beforeEach(() => {
@@ -244,7 +264,8 @@ describe('router', () => {
       window.removeEventListener(EVENT_ROUTE_CHANGE, changeStub)
     })
 
-    it('invokes', () => expect(changeStub.calledOnce).to.be.true)
+    it('invokes routechange event', () =>
+      expect(changeStub.calledOnce).to.be.true)
   })
 
   context('when a route change is canceled', () => {
