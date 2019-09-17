@@ -29,7 +29,10 @@ const handleRouteChange = () => {
         })
       )
     } else {
-      const result = options.useHash ? `/#${prevRoute}` : prevRoute
+      const result = options.useHash
+        ? `${window.location.pathname}#${prevRoute}`
+        : prevRoute
+
       window.history.replaceState({}, '', result)
       window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL))
     }
@@ -122,7 +125,10 @@ export function syncRoute (prev) {
 export function navigate (route) {
   prevRoute = getRoute()
 
-  const result = options.useHash ? `/#${sanitizeRoute(route)}` : route
+  const result = options.useHash
+    ? `${window.location.pathname}#${sanitizeRoute(route)}`
+    : route
+
   window.history.pushState({}, '', result)
   handleRouteChange()
 }
@@ -130,7 +136,10 @@ export function navigate (route) {
 export function redirect (route) {
   prevRoute = getRoute()
 
-  const result = options.useHash ? `/#${sanitizeRoute(route)}` : route
+  const result = options.useHash
+    ? `${window.location.pathname}#${sanitizeRoute(route)}`
+    : route
+
   window.history.replaceState({}, '', result)
   handleRouteChange()
 }

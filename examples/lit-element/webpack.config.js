@@ -8,8 +8,12 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: path.resolve(__dirname, 'dist'),
+    publicPath: '/',
   },
   devServer: {
+    hot: true,
+    inline: true,
+    historyApiFallback: true,
     contentBase: './dist',
   },
   plugins: [
