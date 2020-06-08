@@ -3,19 +3,22 @@
   "version": "1.1.1",
   "license": "MIT",
   "description": "A declarative router for native web components",
-  "main": "src/index.js",
   "author": "Travis True <travis.true08@gmail.com> (http://www.travistrue.io)",
+  "main": "src/index.js",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/travistrue2008/zensen-router.git"
+    "url": "git+https://github.com/zensen/router.git"
   },
   "engines": {
     "node": ">=8.5"
   },
+  "publishConfig": {
+    "access": "public"
+  },
   "scripts": {
     "install:clear": "rm -rf node_modules",
-    "test": "karma start --single-run --browsers HeadlessChromium",
-    "test:watch": "karma start --browsers HeadlessChromium --auto-watch --single-run=false"
+    "test": "karma start --single-run --coverage",
+    "test:watch": "karma start  --coverage --auto-watch --single-run=false"
   },
   "keywords": [
     "component",
@@ -32,7 +35,9 @@
   "devDependencies": {
     "@open-wc/testing": "^0.11.4",
     "@open-wc/testing-karma": "^1.1.1",
+    "@zen-web-components/eslint-config": "^1.0.3",
     "chai": "^4.2.0",
+    "deepmerge": "^4.2.2",
     "eslint": "^5.16.0",
     "eslint-config-standard": "^12.0.0",
     "eslint-plugin-html": "^5.0.3",
@@ -41,7 +46,6 @@
     "eslint-plugin-node": "^8.0.1",
     "eslint-plugin-promise": "^4.1.1",
     "eslint-plugin-standard": "^4.0.0",
-    "istanbul-instrumenter-loader": "^3.0.1",
     "karma": "^4.2.0",
     "karma-chai": "^0.1.0",
     "karma-chrome-launcher": "^3.0.0",
@@ -49,7 +53,6 @@
     "lit-element": "^2.2.1",
     "lit-html": "^1.1.1",
     "mocha": "^6.1.3",
-    "puppeteer": "^1.19.0",
     "pwa-helpers": "^0.9.1",
     "sinon": "^7.3.2",
     "webpack": "^4.28.1",
