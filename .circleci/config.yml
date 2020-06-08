@@ -1,0 +1,21 @@
+version: 2.1
+orbs:
+  node: circleci/node@1.1.6
+jobs:
+  build-and-test:
+    docker:
+      - image: circleci/node:jessie-browsers
+        environment:
+          CHROME_BIN: "/usr/bin/google-chrome"
+    executor:
+      name: node/default
+    steps:
+      - checkout
+      - node/with-cache:
+          steps:
+            - run: yarn install
+            - run: yarn test
+workflows:
+    build-and-test:
+      jobs:
+        - build-and-test
