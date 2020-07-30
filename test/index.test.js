@@ -54,17 +54,55 @@ describe('router', () => {
     sandbox.restore()
   })
 
-  context('getParams()', () => {
-    it('provides params', () =>
-      expect(
-        getParams('/users/:userId/photos/:photoId', '/users/123/photos/456')
-      ).to.deep.eq({
-        userId: '123',
-        photoId: '456',
-      }))
+  describe.only('getParams()', () => {
+    let result
+
+    const HASH = '/users/123/photos/456'
+    const EXPECTED = {
+      userId: '123',
+      photoId: '456',
+    }
+
+    context('when using the window location', () => {
+      beforeEach(() => {
+        mockHash(HASH)
+      })
+
+      context('when NO trailing slash is provided', () => {
+        beforeEach(() => {
+          result = getParams('/users/:userId/photos/:photoId')
+        })
+  
+        it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+      })
+  
+      context('when trailing slash is provided', () => {
+        beforeEach(() => {
+          result = getParams('/users/:userId/photos/:photoId/')
+        })
+  
+        it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+      })
+    })
+
+    context('when NO trailing slash is provided', () => {
+      beforeEach(() => {
+        result = getParams('/users/:userId/photos/:photoId', HASH)
+      })
+
+      it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+    })
+
+    context('when trailing slash is provided', () => {
+      beforeEach(() => {
+        result = getParams('/users/:userId/photos/:photoId/', HASH)
+      })
+
+      it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+    })
   })
 
-  context('syncRoute()', () => {
+  describe('syncRoute()', () => {
     const ROUTE_USERS = '/users'
     const ROUTE_STORIES = '/stories'
 
@@ -85,7 +123,7 @@ describe('router', () => {
     })
   })
 
-  context('getRoute()', () => {
+  describe('getRoute()', () => {
     beforeEach(() => {
       configure({
         useHash: true,
@@ -111,7 +149,7 @@ describe('router', () => {
     })
   })
 
-  context('getQuerystring()', () => {
+  describe('getQuerystring()', () => {
     it('provides querystring params', () => {
       expect(
         getQuerystring('/users?sort=asc&limit=20&offset=4&flagged')
@@ -128,7 +166,7 @@ describe('router', () => {
     })
   })
 
-  context('matchRoute()', () => {
+  describe('matchRoute()', () => {
     context('when matching against exact routes', () => {
       beforeEach(() => {
         mockHash('/users/123/')
@@ -228,7 +266,7 @@ describe('router', () => {
     })
   })
 
-  context('matchRouteSwitch()', () => {
+  describe('matchRouteSwitch()', () => {
     beforeEach(() => {
       mockHash('/users/')
     })

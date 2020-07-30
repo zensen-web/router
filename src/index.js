@@ -40,7 +40,7 @@ const handleRouteChange = () => {
 }
 
 function sanitizeRoute (route) {
-  return options.useHash && route.charAt(0) === '#'
+  return options.useHash && route.startsWith('#')
     ? route.replace('#', '')
     : route
 }
