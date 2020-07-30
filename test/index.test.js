@@ -58,7 +58,9 @@ describe('router', () => {
     let result
 
     const HASH = '/users/123/photos/456'
-    const EXPECTED = {
+    const HASH_SHORT = '/users/123'
+    const PARAMS_PART = { userId: '123' }
+    const PARAMS_FULL = {
       userId: '123',
       photoId: '456',
     }
@@ -73,7 +75,7 @@ describe('router', () => {
           result = getParams('/users/:userId/photos/:photoId')
         })
   
-        it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
       })
   
       context('when trailing slash is provided', () => {
@@ -81,7 +83,25 @@ describe('router', () => {
           result = getParams('/users/:userId/photos/:photoId/')
         })
   
-        it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
+      })
+
+      context('when matching against a pattern shorter than route', () => {
+        beforeEach(() => {
+          mockHash(HASH)
+          result = getParams('/users/:userId/')
+        })
+  
+        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_PART))
+      })
+
+      context('when matching against a pattern longer than route', () => {
+        beforeEach(() => {
+          mockHash(HASH_SHORT)
+          result = getParams('/users/:userId/photos/:photoId/')
+        })
+  
+        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_PART))
       })
     })
 
@@ -90,7 +110,7 @@ describe('router', () => {
         result = getParams('/users/:userId/photos/:photoId', HASH)
       })
 
-      it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+      it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
     })
 
     context('when trailing slash is provided', () => {
@@ -98,7 +118,7 @@ describe('router', () => {
         result = getParams('/users/:userId/photos/:photoId/', HASH)
       })
 
-      it('decodes the params', () => expect(result).to.deep.eq(EXPECTED))
+      it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
     })
   })
 

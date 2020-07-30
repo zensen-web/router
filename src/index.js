@@ -83,10 +83,25 @@ export function configure (opts) {
 }
 
 export function getParams (path, route = '') {
-  const querylessRoute = getQuerylessRoute(route)
   const { pattern, keys } = regexparam(path, true)
+  const querylessRoute = getQuerylessRoute(route)
+  const routeSegments = querylessRoute.split('/')
+  const pathSegments = path.split('/')
+  const diff = pathSegments.length - routeSegments.length
+  const iterCount = diff > 0 ? diff : 0
 
-  return __buildParams(pattern, keys, querylessRoute)
+  const finalRoute = pathSegments.slice(iterCount, pathSegments.length).reduce((accum, curr, index) => {
+    const suffix = curr.startsWith(':') ? ' ' : curr
+
+    return `${accum}/${suffix}`
+  }, querylessRoute)
+
+  const allParams = __buildParams(pattern, keys, finalRoute)
+
+  return Object
+    .entries(allParams)
+    .filter(kvp => kvp[1] !== ' ')
+    .reduce((accum, [k, v]) => ({ ...accum, [k]: v }), {})
 }
 
 export function getQuerystring (route = '') {
@@ -160,7 +175,7 @@ export function matchRouteSwitch (items, route = '') {
   const querystring = getQuerystring(route)
   const querylessRoute = getQuerylessRoute(route)
   const matchedRoute = items.find(item => {
-    const exact = typeof item.exact !== 'undefined' ? item.exact : true
+    const exact = item.exact !== undefined ? item.exact : true
     result = regexparam(item.path, !exact)
     return result.pattern.test(querylessRoute)
   })
