@@ -45,7 +45,7 @@ function sanitizeRoute (route) {
     : route
 }
 
-function getQuerylessRoute (route = '') {
+function getQuerylessRoute (route) {
   const location = sanitizeRoute(route) || getRoute()
   return location.replace(/\?.*/, '')
 }
@@ -82,26 +82,23 @@ export function configure (opts) {
   }
 }
 
-export function getParams (path, route = '') {
-  const { pattern, keys } = regexparam(path, true)
-  const querylessRoute = getQuerylessRoute(route)
-  const routeSegments = querylessRoute.split('/')
-  const pathSegments = path.split('/')
-  const diff = pathSegments.length - routeSegments.length
-  const iterCount = diff > 0 ? diff : 0
+export function getParams (pattern, route = '') {
+  const routeItems = getQuerylessRoute(route).split('/').filter(item => item)
+  const patternItems = pattern.split('/').filter(item => item)
+  const length = routeItems.length < patternItems.length
+    ? routeItems.length
+    : patternItems.length
 
-  const finalRoute = pathSegments.slice(iterCount, pathSegments.length).reduce((accum, curr, index) => {
-    const suffix = curr.startsWith(':') ? ' ' : curr
+  const range = new Array(length).fill(0).map((_, index) => index)
+  const matched = range.every(index =>
+    patternItems[index].startsWith(':') ||
+    patternItems[index] === routeItems[index])
 
-    return `${accum}/${suffix}`
-  }, querylessRoute)
-
-  const allParams = __buildParams(pattern, keys, finalRoute)
-
-  return Object
-    .entries(allParams)
-    .filter(kvp => kvp[1] !== ' ')
-    .reduce((accum, [k, v]) => ({ ...accum, [k]: v }), {})
+  return matched ? patternItems.reduce((accum, curr, index) =>
+    (curr.startsWith(':') ? {
+      ...accum,
+      [curr.replace(':', '')]: routeItems[index],
+    } : accum), {}) : {}
 }
 
 export function getQuerystring (route = '') {

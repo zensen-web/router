@@ -54,71 +54,125 @@ describe('router', () => {
     sandbox.restore()
   })
 
-  describe.only('getParams()', () => {
-    let result
-
+  describe('getParams()', () => {
     const HASH = '/users/123/photos/456'
-    const HASH_SHORT = '/users/123'
     const PARAMS_PART = { userId: '123' }
     const PARAMS_FULL = {
       userId: '123',
       photoId: '456',
     }
 
-    context('when using the window location', () => {
-      beforeEach(() => {
-        mockHash(HASH)
+    let pattern
+
+    describe('window.location', () => {
+      context('when the pattern does not match the route', () => {
+        beforeEach(() => {
+          pattern = '/asdf/'
+        })
+
+        it('returns an empty object', () =>
+          expect(getParams(pattern)).to.be.eql({}))
       })
 
-      context('when NO trailing slash is provided', () => {
+      context('when location has trailing slash', () => {
         beforeEach(() => {
-          result = getParams('/users/:userId/photos/:photoId')
+          mockHash(`${HASH}/`)
         })
+
+        context('when pattern has trailing slash', () => {
+          beforeEach(() => {
+            pattern = '/users/:userId/photos/:photoId/'
+          })
   
-        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
-      })
-  
-      context('when trailing slash is provided', () => {
-        beforeEach(() => {
-          result = getParams('/users/:userId/photos/:photoId/')
+          it('decodes params', () =>
+            expect(getParams(pattern)).to.be.eql(PARAMS_FULL))
         })
+
+        context('when pattern has NO trailing slash', () => {
+          beforeEach(() => {
+            pattern = '/users/:userId/photos/:photoId'
+          })
   
-        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
+          it('decodes params', () =>
+            expect(getParams(pattern)).to.be.eql(PARAMS_FULL))
+        })
+
+        context('when pattern is shorter than route', () => {
+          beforeEach(() => {
+            pattern = '/users/:userId/'
+          })
+  
+          it('decodes params', () =>
+            expect(getParams(pattern)).to.be.eql(PARAMS_PART))
+        })
+
+        context('when pattern is longer than route', () => {
+          beforeEach(() => {
+            mockHash('/users/123/')
+            pattern = '/users/:userId/photos/:photoId/'
+          })
+  
+          it('decodes params', () =>
+            expect(getParams(pattern)).to.be.eql({
+              userId: '123',
+              photoId: undefined,
+            }))
+        })
+
+        context('when pattern has two params next to each other', () => {
+          beforeEach(() => {
+            pattern = '/:subApp/:userId/'
+          })
+  
+          context('when route has all params', () => {
+            beforeEach(() => {
+              mockHash('/settings/123/')
+            })
+    
+            it('decodes params', () =>
+              expect(getParams(pattern)).to.be.eql({
+                subApp: 'settings',
+                userId: '123',
+              }))
+          })
+
+          context('when route is shorter than pattern', () => {
+            beforeEach(() => {
+              mockHash('/settings/')
+            })
+    
+            it('decodes params', () =>
+              expect(getParams(pattern)).to.be.eql({
+                subApp: 'settings',
+                userId: undefined,
+              }))
+          })
+        })
       })
 
-      context('when matching against a pattern shorter than route', () => {
+      context('when location has NO trailing slash', () => {
         beforeEach(() => {
           mockHash(HASH)
-          result = getParams('/users/:userId/')
         })
-  
-        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_PART))
-      })
 
-      context('when matching against a pattern longer than route', () => {
-        beforeEach(() => {
-          mockHash(HASH_SHORT)
-          result = getParams('/users/:userId/photos/:photoId/')
+        context('when pattern has trailing slash', () => {
+          beforeEach(() => {
+            pattern = '/users/:userId/photos/:photoId/'
+          })
+  
+          it('decodes params', () =>
+            expect(getParams(pattern)).to.be.eql(PARAMS_FULL))
         })
+
+        context('when pattern has NO trailing slash', () => {
+          beforeEach(() => {
+            pattern = '/users/:userId/photos/:photoId'
+          })
   
-        it('decodes the params', () => expect(result).to.deep.eq(PARAMS_PART))
+          it('decodes params', () =>
+            expect(getParams(pattern)).to.be.eql(PARAMS_FULL))
+        })
       })
-    })
-
-    context('when NO trailing slash is provided', () => {
-      beforeEach(() => {
-        result = getParams('/users/:userId/photos/:photoId', HASH)
-      })
-
-      it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
-    })
-
-    context('when trailing slash is provided', () => {
-      beforeEach(() => {
-        result = getParams('/users/:userId/photos/:photoId/', HASH)
-      })
-
-      it('decodes the params', () => expect(result).to.deep.eq(PARAMS_FULL))
     })
   })
 
