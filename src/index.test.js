@@ -17,17 +17,6 @@ import {
 
 const WINDOW_LOCATION_ORIGINAL = { ...window.location }
 
-const ROUTES = [
-  {
-    path: '/',
-    resolver: () => 0,
-  },
-  {
-    path: '/users/',
-    resolver: () => 1,
-  },
-]
-
 function createClickEvent({
   tag = 'A',
   metaKey = false,
