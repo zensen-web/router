@@ -1,10 +1,12 @@
-import { matchRouteSwitch, EVENT_ROUTE_CHANGE } from '../../../../src'
+import './x-page-home'
+import './x-page-about'
+import router, { EVENT_ROUTE_CHANGE } from '../../../../src'
 
 import {
   LitElement,
   html,
   css,
-} from 'lit-element'
+} from 'lit'
 
 class App extends LitElement {
   static get properties () {
@@ -23,14 +25,16 @@ class App extends LitElement {
 
       :host {
         display: block;
+        min-height: 100vh;
         font-size: 1.4rem;
       }
 
       .container {
-        display: flex;
+        display: grid;
         width: 100%;
         height: 100%;
-        flex-flow: nowrap column;
+        grid-template-columns: 1fr;
+        grid-template-rows: auto 1fr;
       }
 
       .nav {
@@ -48,27 +52,21 @@ class App extends LitElement {
         font-size: 1.4rem;
         text-decoration: none;
       }
-
-      .spacer {
-        height: 2rem;
-      }
     `
   }
 
   constructor () {
     super()
-    this.__initState()
-    this.__initHandlers()
-  }
+    router.initialize()
 
-  __initState () {
-    this.__route = window.location.hash
+    this.__route = router.getPath()
     this.__navItems = this.genNavItems()
-  }
 
-  __initHandlers () {
     this.__handlers = {
-      changeRoute: e => (this.__route = e.detail),
+      changeRoute: event => {
+        console.info(`changeRoute(): "${this.__route}"`)
+        this.__route = event.detail
+      },
     }
   }
 
@@ -88,28 +86,40 @@ class App extends LitElement {
     return [
       {
         exact: false,
-        label: 'Home',
-        path: '/home/',
-        href: '#/home',
-        resolver: () => html`
-          <p>Home</p>
-        `,
+        path: '/about',
+        resolver: (routeTail) => {
+          console.info('routeTail:', routeTail)
+
+          return html`
+            <x-page-about
+              .routeTail=${routeTail}
+            ></x-page-about>
+          `
+        },
       },
       {
-        exact: false,
-        label: 'About Us',
-        path: '/about/',
-        href: '#/about',
-        resolver: () => html`
-          <p>About Us</p>
-        `,
+        exact: true,
+        path: '/',
+        resolver: (_routeTail, ctx) => {
+          console.info('ctx:', ctx)
+
+          return html`
+            <x-page-home
+              .ctx=${ctx}
+            ></x-page-home>
+          `
+        },
       },
       {
         exact: false,
         path: '/',
-        resolver: () => html`
-          <p>Not Found</p>
-        `,
+        resolver: () => {
+          console.info('not found')
+
+          return html`
+            <p>Not Found</p>
+          `
+        },
       },
     ]
   }
@@ -118,17 +128,18 @@ class App extends LitElement {
     return html`
       <div class="container">
         <nav class="nav">
-          ${this.__navItems.slice(0, -1).map(item => html`
-            <a
-              class="nav-item"
-              href="${item.href}"
-            >${item.label}</a>
-          `)}
+          <a
+            class="nav-item"
+            href="/"
+          >Home</a>
+
+          <a
+            class="nav-item"
+            href="/about"
+          >About Us</a>
         </nav>
 
-        <div class="spacer"></div>
-
-        ${matchRouteSwitch(this.__navItems, this.__route)}
+        ${router.matchSwitch(this.__navItems, this.__route)}
       </div>
     `
   }

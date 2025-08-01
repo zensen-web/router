@@ -1,57 +1,60 @@
-import { installRouter } from 'pwa-helpers'
-
-import regexparam from 'regexparam'
-
 export const EVENT_ROUTE_CHANGE = 'routechange'
 export const EVENT_ROUTE_CANCEL = 'routecancel'
 export const EVENT_ROUTE_SHOULD_CHANGE = 'routeshouldchange'
 
-let prevRoute = ''
-
-let options = {
-  useHash: true,
-  stubbedLocation: null,
+const OPERATION = {
+  PUSH: 'pushState',
+  REPLACE: 'replaceState',
 }
 
-const handleRouteChange = () => {
-  if (getRoute() !== prevRoute) {
-    const result = window.dispatchEvent(
-      new CustomEvent(EVENT_ROUTE_SHOULD_CHANGE, {
-        cancelable: true,
-        detail: getRoute(),
-      }),
-    )
+let __initialized = false
 
-    if (result) {
-      window.dispatchEvent(
-        new CustomEvent(EVENT_ROUTE_CHANGE, {
-          detail: getRoute(),
-        })
-      )
+/*
+  TEMPORARY:
+  This was borrowed from a very specific version of regexparam. Going
+  to write an easier-to-understand implementation.
+ */
+
+function __regexparam (str, loose) {
+  var c, o, tmp, ext, keys=[], pattern='', arr=str.split('/')
+  arr[0] || arr.shift()
+
+  while (tmp = arr.shift()) {
+    c = tmp[0]
+
+    if (c === '*') {
+      keys.push('wild')
+      pattern += '/(.*)'
+    } else if (c === ':') {
+      o = tmp.indexOf('?', 1)
+      ext = tmp.indexOf('.', 1)
+      keys.push( tmp.substring(1, !!~o ? o : !!~ext ? ext : tmp.length) )
+      pattern += !!~o && !~ext ? '(?:/([^/]+?))?' : '/([^/]+?)'
+      if (!!~ext) pattern += (!!~o ? '?' : '') + '\\' + tmp.substring(ext)
     } else {
-      const result = options.useHash
-        ? `${window.location.pathname}#${prevRoute}`
-        : prevRoute
-
-      window.history.replaceState({}, '', result)
-      window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL))
+      pattern += '/' + tmp
     }
+  }
+
+  return {
+    keys: keys,
+    pattern: new RegExp('^' + pattern + (loose ? '(?:$|\/)' : '\/?$'), 'i')
   }
 }
 
-function sanitizeRoute (route) {
-  return options.useHash && route.startsWith('#')
-    ? route.replace('#', '')
-    : route
+function __isRouteDifferent (routePath) {
+  return routePath !== window.location.pathname
 }
 
-function getQuerylessRoute (route) {
-  const location = sanitizeRoute(route) || getRoute()
-  return location.replace(/\?.*/, '')
+function __validateInitialized () {
+  if (!__initialized) {
+    throw new Error('Router is not initialized')
+  }
 }
 
 function __buildParams (pattern, keys, querylessRoute) {
   const match = pattern.exec(querylessRoute)
+
   return keys.reduce(
     (list, key, index) => ({
       ...list,
@@ -61,126 +64,188 @@ function __buildParams (pattern, keys, querylessRoute) {
   )
 }
 
-function resolveRoute (pattern, keys, querylessRoute, querystring, callback) {
-  const ctx = {
-    querystring,
-    params: __buildParams(pattern, keys, querylessRoute),
-  }
-
+function __resolveRoute (pattern, keys, routePath, callback) {
   const reg = new RegExp(pattern)
-  const trimmed = querylessRoute.replace(reg, '')
+  const trimmed = routePath.replace(reg, '')
   const tailRoute = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
-  return callback(tailRoute, ctx)
+
+  return callback(tailRoute, {
+    params: __buildParams(pattern, keys, routePath),
+    query: getQuery(),
+  })
 }
 
-export function configure (opts) {
-  const prevLocation = options.stubbedLocation
-  options = { ...options, ...opts }
+function __changeRoute (href, query, operation) {
+  const { pathname } = new URL(href)
 
-  if (options.stubbedLocation !== prevLocation) {
-    handleRouteChange()
+  const result = window.dispatchEvent(
+    new CustomEvent(EVENT_ROUTE_SHOULD_CHANGE, {
+      detail: pathname,
+      cancelable: true,
+    }),
+  )
+
+  if (result) {
+    if (operation) {
+      const { origin, hash } = window.location
+      const href = `${origin}${location.pathname}${hash}`
+
+      if (query) {
+        const params = new URLSearchParams(query)
+
+        window.location.search = params.toString()
+      }
+
+      window.history[operation]({}, '', pathname)
+    }
+
+    window.dispatchEvent(
+      new CustomEvent(EVENT_ROUTE_CHANGE, {
+        detail: pathname,
+      })
+    )
+  } else {
+    window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL))
   }
 }
 
-export function getParams (pattern, route = '') {
-  const routeItems = getQuerylessRoute(route).split('/').filter(item => item)
-  const patternItems = pattern.split('/').filter(item => item)
-  const length = routeItems.length < patternItems.length
-    ? routeItems.length
-    : patternItems.length
-
-  const range = new Array(length).fill(0).map((_, index) => index)
-  const matched = range.every(index =>
-    patternItems[index].startsWith(':') ||
-    patternItems[index] === routeItems[index])
-
-  return matched ? patternItems.reduce((accum, curr, index) =>
-    (curr.startsWith(':') ? {
-      ...accum,
-      [curr.replace(':', '')]: routeItems[index],
-    } : accum), {}) : {}
+function getPath () {
+  return window.location.pathname
 }
 
-export function getQuerystring (route = '') {
-  const reg = /.*\?/
-  const input = route || getRoute()
-
-  return input.indexOf('?') !== -1
-    ? input.replace(reg, '')
-      .split('&')
-      .map(keyValuePair => keyValuePair.split('='))
-      .reduce((accum, [key, value]) => ({
-        ...accum,
-        [key]: value || true,
-      }), {})
-    : {}
+function getHash () {
+  return window.location.hash
 }
 
-/*
-  Used as a work-around to mock out window.location
-  since mocha doesn't want us to modify it directly
+function getQuery () {
+  const params = new URLSearchParams(window.location.search)
 
-  See: https://stackoverflow.com/questions/34575750/how-to-stub-exported-function-in-es6
-*/
-
-export function getRoute () {
-  const stub = options.stubbedLocation
-  const { pathname, hash } = stub || window.location
-  return options.useHash ? hash.replace('#', '') : `${pathname}${hash}`
+  return Object.fromEntries(params)
 }
 
-export function syncRoute (prev) {
-  prevRoute = prev
-  handleRouteChange()
+function navigate (routePath, query) {
+  __validateInitialized()
+
+  if (!__isRouteDifferent(routePath)) {
+    return
+  }
+
+  const { origin, hash } = window.location
+  const href = `${origin}${routePath}${hash}`
+
+  __changeRoute(href, query, OPERATION.PUSH)
 }
 
-export function navigate (route) {
-  prevRoute = getRoute()
+function redirect (routePath, query) {
+  __validateInitialized()
+  if (!__isRouteDifferent(routePath)) {
+    return
+  }
 
-  const result = options.useHash
-    ? `${window.location.pathname}#${sanitizeRoute(route)}`
-    : route
+  const { origin, hash} = window.location
+  const href = `${origin}${routePath}${hash}`
 
-  window.history.pushState({}, '', result)
-  handleRouteChange()
+  __changeRoute(href, query, OPERATION.REPLACE)
 }
 
-export function redirect (route) {
-  prevRoute = getRoute()
+function match (path, callback, routePath = null, exact = true) {
+  __validateInitialized()
 
-  const result = options.useHash
-    ? `${window.location.pathname}#${sanitizeRoute(route)}`
-    : route
+  const p = routePath === null ? routePath : getPath()
+  const { pattern, keys } = __regexparam(path, !exact)
 
-  window.history.replaceState({}, '', result)
-  handleRouteChange()
-}
-
-export function matchRoute (path, callback, route = '', exact = true) {
-  const querystring = getQuerystring(route)
-  const querylessRoute = getQuerylessRoute(route)
-  const sanitizedPath = sanitizeRoute(path)
-  const { pattern, keys } = regexparam(sanitizedPath, !exact)
-  return pattern.test(querylessRoute)
-    ? resolveRoute(pattern, keys, querylessRoute, querystring, callback)
+  return pattern.test(route)
+    ? __resolveRoute(pattern, keys, p, callback)
     : ''
 }
 
-export function matchRouteSwitch (items, route = '') {
-  let result = {}
+function matchSwitch (items, routePath = null) {
+  __validateInitialized()
 
-  const querystring = getQuerystring(route)
-  const querylessRoute = getQuerylessRoute(route)
+  let result = {}
+  const p = routePath !== null ? routePath : getPath()
+
   const matchedRoute = items.find(item => {
     const exact = item.exact !== undefined ? item.exact : true
-    result = regexparam(item.path, !exact)
-    return result.pattern.test(querylessRoute)
+    result = __regexparam(item.path, !exact)
+
+    return result.pattern.test(p)
   })
 
   const { pattern, keys } = result
+
   return matchedRoute
-    ? resolveRoute(pattern, keys, querylessRoute, querystring, matchedRoute.resolver)
+    ? __resolveRoute(
+      pattern,
+      keys,
+      p,
+      matchedRoute.resolver,
+    )
     : ''
 }
 
-installRouter(handleRouteChange)
+function initialize () {
+  document.body.addEventListener('click', event => {
+    if (
+      event.metaKey ||
+      event.ctrlKey ||
+      event.shiftKey ||
+      event.defaultPrevented
+    ) {
+      return
+    }
+
+    const anchor = event
+      .composedPath()
+      .find(n => n.tagName === 'A')
+
+    if (
+      !anchor || anchor.target ||
+      anchor.hasAttribute('download') ||
+      anchor.getAttribute('rel') === 'external'
+    ) {
+      return
+    }
+
+    if (!anchor.href || anchor.href.indexOf('mailto:') !== -1) {
+      return
+    }
+
+    const origin =
+      window.location.origin ||
+      window.location.protocol + '//' + window.location.host
+
+    if (anchor.href.indexOf(origin) !== 0) {
+      return
+    }
+
+    event.preventDefault()
+
+    if (anchor.href !== window.location.href) {
+      __changeRoute(anchor.href, null, OPERATION.PUSH)
+    }
+  })
+
+  window.addEventListener('popstate', () => {
+    __changeRoute(null, null, null)
+  })
+
+  __initialized = true
+  __changeRoute(window.location.href, null, null)
+}
+
+function shutdown () {
+  __initialized = false
+}
+
+export default {
+  initialize,
+  shutdown,
+  getPath,
+  getHash,
+  getQuery,
+  navigate,
+  redirect,
+  match,
+  matchSwitch,
+}

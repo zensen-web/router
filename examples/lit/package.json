@@ -1,0 +1,13 @@
+{
+  "name": "lit-example",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {},
+  "devDependencies": {
+    "lit": "^3.3.1",
+    "vite": "^7.0.6"
+  }
+}
