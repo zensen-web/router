@@ -110,6 +110,17 @@ describe('global events', () => {
     window.removeEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
   })
 
+  test('when initialized twice', () => {
+    const fn = () => {
+      router.initialize()
+      router.initialize()
+    }
+
+    expect(fn).toThrowError(new Error('Router is already initialized'))
+
+    router.shutdown()
+  })
+
   test('when meta+clicking an anchor tag', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
@@ -532,6 +543,34 @@ describe('global events', () => {
   })
 })
 
+describe('NOT initialized', () => {
+  test('when navigate() is invoked', () => {
+    const fn = () => router.navigate('/users/123')
+
+    expect(fn).toThrowError(new Error('Router is not initialized'))
+  })
+
+  test('when redirect() is invoked', () => {
+    const fn = () => router.redirect('/users/123')
+
+    expect(fn).toThrowError(new Error('Router is not initialized'))
+  })
+
+  test('when match() is invoked', () => {
+    const resolverStub = vi.fn()
+    const fn = () => router.match('/users/123', resolverStub)
+
+    expect(fn).toThrowError(new Error('Router is not initialized'))
+  })
+
+  test('when matchSwitch() is invoked', () => {
+    const resolverStub = vi.fn()
+    const fn = () => router.matchSwitch('/users/123', resolverStub)
+
+    expect(fn).toThrowError(new Error('Router is not initialized'))
+  })
+})
+
 describe('interface', () => {
   beforeEach(() => {
     router.initialize()
@@ -565,7 +604,7 @@ describe('interface', () => {
 
   describe('getQuery()', () => {
     test('when invoked', () => {
-      window.location.search = '?foo=bar'
+      window.location.search = 'foo=bar'
 
       expect(router.getQuery()).toEqual({
         foo: 'bar',
@@ -574,14 +613,6 @@ describe('interface', () => {
   })
 
   describe('navigate()', () => {
-    test('when NOT initialized', () => {
-      const fn = () => router.navigate('/users/123')
-
-      router.shutdown()
-
-      expect(fn).toThrowError(new Error('Router is not initialized'))
-    })
-
     test('when navigating to the current route', () => {
       window.location.pathname = '/users/123'
 
@@ -622,14 +653,6 @@ describe('interface', () => {
   })
 
   describe('redirect()', () => {
-    test('when NOT initialized', () => {
-      const fn = () => router.redirect('/users/123')
-
-      router.shutdown()
-
-      expect(fn).toThrowError(new Error('Router is not initialized'))
-    })
-
     test('when navigating to the current route', () => {
       window.location.pathname = '/users/123'
 
@@ -677,14 +700,6 @@ describe('interface', () => {
     beforeEach(() => {
       resolverStub = vi.fn()
       resolverStub.mockReturnValue(RESULT)
-    })
-
-    test('when NOT initialized', () => {
-      const fn = () => router.match('/users/123', resolverStub)
-
-      router.shutdown()
-
-      expect(fn).toThrowError(new Error('Router is not initialized'))
     })
 
     test('when path is static NO match', () => {
@@ -908,14 +923,30 @@ describe('interface', () => {
   })
 
   describe('matchSwitch()', () => {
+    test('when NOT matching paths are provided', () => {
+      const NAV_ITEMS = [
+        {
+          path: '/users',
+          resolver: vi.fn(() => '<p>USERS</p>'),
+        },
+        {
+          path: '/photos',
+          resolver: vi.fn(() => '<p>PHOTOS</p>'),
+        },
+        {
+          path: '/appointments',
+          resolver: vi.fn(() => '<p>APPOINTMENTS</p>'),
+        },
+      ]
 
-    test('when NOT initialized', () => {
-      const resolverStub = vi.fn()
-      const fn = () => router.matchSwitch('/users/123', resolverStub)
+      window.location.pathname = '/asdf'
 
-      router.shutdown()
+      const result = router.matchSwitch(NAV_ITEMS)
 
-      expect(fn).toThrowError(new Error('Router is not initialized'))
+      expect(result).toBe('')
+      expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
+      expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
+      expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
     })
 
     test('when multiple matching paths are provided', () => {

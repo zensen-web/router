@@ -230,19 +230,22 @@ export function handleAnchorClick(event) {
   }
 }
 
+export function handlePopState () {
+  __changeRoute(window.location.href, null, null)
+}
+
 function isInitialized () {
   return __initialized
 }
 
 /* v8 ignore start */
 function initialize () {
+  if (__initialized) {
+    throw new Error('Router is already initialized')
+  }
+
   window.addEventListener('click', handleAnchorClick)
-
-  window.addEventListener('popstate', () => {
-    console.log('popstate')
-
-    __changeRoute(window.location.href, null, null)
-  })
+  window.addEventListener('popstate', handlePopState)
 
   __initialized = true
   __changeRoute(window.location.href, null, null)
@@ -250,6 +253,11 @@ function initialize () {
 /* v8 ignore end */
 
 function shutdown () {
+  __validateInitialized()
+
+  window.removeEventListener('click', handleAnchorClick)
+  window.removeEventListener('popstate', handlePopState)
+
   __initialized = false
 }
 
