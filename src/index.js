@@ -186,6 +186,8 @@ function matchSwitch (items, routePath = null) {
 
 function initialize () {
   document.body.addEventListener('click', event => {
+    console.log('event.metaKey:', event.metaKey)
+
     if (
       event.metaKey ||
       event.ctrlKey ||
