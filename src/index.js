@@ -239,7 +239,9 @@ function initialize () {
   window.addEventListener('click', handleAnchorClick)
 
   window.addEventListener('popstate', () => {
-    __changeRoute(null, null, null)
+    console.log('popstate')
+
+    __changeRoute(window.location.href, null, null)
   })
 
   __initialized = true

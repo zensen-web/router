@@ -63,12 +63,12 @@ class App extends LitElement {
     this.__navItems = this.genNavItems()
 
     this.__handlers = {
-      shouldChangeRoute: event => {
-        console.info(`shouldChangeRoute(): "${this.__route}"`)
+      shouldChangeRoute: (event) => {
+        console.info(`shouldChangeRoute(): "${event.detail}"`)
         // event.preventDefault()
       },
       changeRoute: event => {
-        console.info(`changeRoute(): "${this.__route}"`)
+        console.info(`changeRoute(): "${event.detail}"`)
         this.__route = event.detail
       },
     }
