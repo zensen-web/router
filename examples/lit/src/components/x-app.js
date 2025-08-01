@@ -1,12 +1,12 @@
 import './x-page-home'
 import './x-page-about'
-import router, { EVENT_ROUTE_CHANGE } from '../../../../src'
 
-import {
-  LitElement,
-  html,
-  css,
-} from 'lit'
+import { LitElement, html, css } from 'lit'
+
+import router, {
+  EVENT_ROUTE_CHANGE,
+  EVENT_ROUTE_SHOULD_CHANGE,
+} from '../../../../src'
 
 class App extends LitElement {
   static get properties () {
@@ -63,6 +63,10 @@ class App extends LitElement {
     this.__navItems = this.genNavItems()
 
     this.__handlers = {
+      shouldChangeRoute: event => {
+        console.info(`shouldChangeRoute(): "${this.__route}"`)
+        // event.preventDefault()
+      },
       changeRoute: event => {
         console.info(`changeRoute(): "${this.__route}"`)
         this.__route = event.detail
@@ -74,12 +78,14 @@ class App extends LitElement {
     super.connectedCallback()
 
     window.addEventListener(EVENT_ROUTE_CHANGE, this.__handlers.changeRoute)
+    window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, this.__handlers.shouldChangeRoute)
   }
 
   disconnectedCallback () {
     super.disconnectedCallback()
 
     window.removeEventListener(EVENT_ROUTE_CHANGE, this.__handlers.changeRoute)
+    window.removeEventListener(EVENT_ROUTE_SHOULD_CHANGE, this.__handlers.shouldChangeRoute)
   }
 
   genNavItems () {

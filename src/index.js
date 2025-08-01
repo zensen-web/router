@@ -15,6 +15,7 @@ let __initialized = false
   to write an easier-to-understand implementation.
  */
 
+/* v8 ignore start */
 function __regexparam (str, loose) {
   var c, o, tmp, ext, keys=[], pattern='', arr=str.split('/')
   arr[0] || arr.shift()
@@ -41,6 +42,7 @@ function __regexparam (str, loose) {
     pattern: new RegExp('^' + pattern + (loose ? '(?:$|\/)' : '\/?$'), 'i')
   }
 }
+/* v8 ignore end */
 
 function __isRouteDifferent (routePath) {
   return routePath !== window.location.pathname
@@ -87,9 +89,6 @@ function __changeRoute (href, query, operation) {
 
   if (result) {
     if (operation) {
-      const { origin, hash } = window.location
-      const href = `${origin}${location.pathname}${hash}`
-
       if (query) {
         const params = new URLSearchParams(query)
 
@@ -123,7 +122,7 @@ function getQuery () {
   return Object.fromEntries(params)
 }
 
-function navigate (routePath, query) {
+function navigate (routePath, query = null) {
   __validateInitialized()
 
   if (!__isRouteDifferent(routePath)) {
@@ -136,8 +135,9 @@ function navigate (routePath, query) {
   __changeRoute(href, query, OPERATION.PUSH)
 }
 
-function redirect (routePath, query) {
+function redirect (routePath, query = null) {
   __validateInitialized()
+
   if (!__isRouteDifferent(routePath)) {
     return
   }
@@ -148,13 +148,16 @@ function redirect (routePath, query) {
   __changeRoute(href, query, OPERATION.REPLACE)
 }
 
-function match (path, callback, routePath = null, exact = true) {
+function match (path, callback, {
+  routePath = null,
+  exact = false,
+} = {}) {
   __validateInitialized()
 
-  const p = routePath === null ? routePath : getPath()
+  const p = routePath !== null ? routePath : getPath()
   const { pattern, keys } = __regexparam(path, !exact)
 
-  return pattern.test(route)
+  return pattern.test(p)
     ? __resolveRoute(pattern, keys, p, callback)
     : ''
 }
@@ -166,7 +169,7 @@ function matchSwitch (items, routePath = null) {
   const p = routePath !== null ? routePath : getPath()
 
   const matchedRoute = items.find(item => {
-    const exact = item.exact !== undefined ? item.exact : true
+    const exact = item.exact !== undefined ? item.exact : false
     result = __regexparam(item.path, !exact)
 
     return result.pattern.test(p)
@@ -184,49 +187,56 @@ function matchSwitch (items, routePath = null) {
     : ''
 }
 
+/* only exposed for testing purposes */
+
+export function handleAnchorClick(event) {
+  if (
+    event.metaKey ||
+    event.ctrlKey ||
+    event.shiftKey ||
+    event.defaultPrevented
+  ) {
+    return
+  }
+
+  const anchor = event
+    .composedPath()
+    .find(n => n.tagName === 'A')
+
+  if (
+    !anchor || anchor.target ||
+    anchor.hasAttribute('download') ||
+    anchor.getAttribute('rel') === 'external'
+  ) {
+    return
+  }
+
+  if (!anchor.href || anchor.href.indexOf('mailto:') !== -1) {
+    return
+  }
+
+  const origin =
+    window.location.origin ||
+    window.location.protocol + '//' + window.location.host
+
+  if (anchor.href.indexOf(origin) !== 0) {
+    return
+  }
+
+  event.preventDefault()
+
+  if (anchor.href !== window.location.href) {
+    __changeRoute(anchor.href, null, OPERATION.PUSH)
+  }
+}
+
+function isInitialized () {
+  return __initialized
+}
+
+/* v8 ignore start */
 function initialize () {
-  document.body.addEventListener('click', event => {
-    console.log('event.metaKey:', event.metaKey)
-
-    if (
-      event.metaKey ||
-      event.ctrlKey ||
-      event.shiftKey ||
-      event.defaultPrevented
-    ) {
-      return
-    }
-
-    const anchor = event
-      .composedPath()
-      .find(n => n.tagName === 'A')
-
-    if (
-      !anchor || anchor.target ||
-      anchor.hasAttribute('download') ||
-      anchor.getAttribute('rel') === 'external'
-    ) {
-      return
-    }
-
-    if (!anchor.href || anchor.href.indexOf('mailto:') !== -1) {
-      return
-    }
-
-    const origin =
-      window.location.origin ||
-      window.location.protocol + '//' + window.location.host
-
-    if (anchor.href.indexOf(origin) !== 0) {
-      return
-    }
-
-    event.preventDefault()
-
-    if (anchor.href !== window.location.href) {
-      __changeRoute(anchor.href, null, OPERATION.PUSH)
-    }
-  })
+  window.addEventListener('click', handleAnchorClick)
 
   window.addEventListener('popstate', () => {
     __changeRoute(null, null, null)
@@ -235,12 +245,14 @@ function initialize () {
   __initialized = true
   __changeRoute(window.location.href, null, null)
 }
+/* v8 ignore end */
 
 function shutdown () {
   __initialized = false
 }
 
 export default {
+  isInitialized,
   initialize,
   shutdown,
   getPath,
