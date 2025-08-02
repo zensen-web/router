@@ -68,21 +68,30 @@ function __buildParams (pattern, keys, querylessRoute) {
   )
 }
 
-function __resolveRoute (pattern, keys, routePath, ctx) {
+function __resolveRoute (pattern, keys, routePath, item) {
   const reg = new RegExp(pattern)
   const trimmed = routePath.replace(reg, '')
   const tailRoute = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
-  const data = { ...ctx }
+  const data = { ...item }
 
   delete data.exact
   delete data.path
+  delete data.redirect
   delete data.resolver
 
-  return ctx.resolver(tailRoute, {
+  const ctx = {
     params: __buildParams(pattern, keys, routePath),
     query: getQuery(),
     data,
-  })
+  }
+
+  if (item.redirect) {
+    navigate(item.redirect)
+
+    return ''
+  }
+
+  return item.resolver(tailRoute, ctx)
 }
 
 function __changeRoute (href, query, operation) {

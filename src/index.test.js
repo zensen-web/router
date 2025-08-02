@@ -1235,5 +1235,33 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
     })
+
+    test('when matched item has a "redirect()" directive', () => {
+      const NAV_ITEMS = [
+        {
+          path: '/users/:userId',
+          resolver: vi.fn(() => '<p>SELECTED USER</p>'),
+        },
+        {
+          path: '/users',
+          redirect: '/users/123',
+          resolver: vi.fn(() => '<p>USERS</p>'),
+        },
+      ]
+
+      window.location.pathname = '/users'
+
+      const result = router.matchSwitch(NAV_ITEMS)
+
+      expect(result).toBe('')
+      expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
+      expect(NAV_ITEMS[1].resolver).not.toHaveBeenCalled()
+      expect(window.history.pushState).toHaveBeenCalledOnce()
+      expect(window.history.pushState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/users/123',
+      )
+    })
   })
 })
