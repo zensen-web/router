@@ -66,14 +66,20 @@ function __buildParams (pattern, keys, querylessRoute) {
   )
 }
 
-function __resolveRoute (pattern, keys, routePath, callback) {
+function __resolveRoute (pattern, keys, routePath, ctx) {
   const reg = new RegExp(pattern)
   const trimmed = routePath.replace(reg, '')
   const tailRoute = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
+  const data = { ...ctx }
 
-  return callback(tailRoute, {
+  delete data.exact
+  delete data.path
+  delete data.resolver
+
+  return ctx.resolver(tailRoute, {
     params: __buildParams(pattern, keys, routePath),
     query: getQuery(),
+    data,
   })
 }
 
@@ -148,9 +154,10 @@ function redirect (routePath, query = null) {
   __changeRoute(href, query, OPERATION.REPLACE)
 }
 
-function match (path, callback, {
+function match (path, resolver, {
   routePath = null,
   exact = false,
+  data = {},
 } = {}) {
   __validateInitialized()
 
@@ -158,7 +165,10 @@ function match (path, callback, {
   const { pattern, keys } = __regexparam(path, !exact)
 
   return pattern.test(p)
-    ? __resolveRoute(pattern, keys, p, callback)
+    ? __resolveRoute(pattern, keys, p, {
+      ...data,
+      resolver,
+    })
     : ''
 }
 
@@ -182,7 +192,7 @@ function matchSwitch (items, routePath = null) {
       pattern,
       keys,
       p,
-      matchedRoute.resolver,
+      matchedRoute,
     )
     : ''
 }

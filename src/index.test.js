@@ -711,6 +711,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -725,6 +726,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -739,6 +741,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -753,6 +756,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -781,6 +785,7 @@ describe('interface', () => {
           a: 'foo',
           b: 'bar',
         },
+        data: {},
       })
     })
 
@@ -798,6 +803,7 @@ describe('interface', () => {
           photoId: '456',
         },
         query: {},
+        data: {},
       })
     })
 
@@ -832,6 +838,7 @@ describe('interface', () => {
           userId: '123',
         },
         query: {},
+        data: {},
       })
     })
 
@@ -848,6 +855,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -864,6 +872,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/photos/456', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -880,6 +889,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
 
@@ -907,6 +917,7 @@ describe('interface', () => {
       expect(resolverStub).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
       })
     })
   })
@@ -967,6 +978,7 @@ describe('interface', () => {
           userId: '123',
         },
         query: {},
+        data: {},
       })
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
@@ -999,6 +1011,7 @@ describe('interface', () => {
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/123', {
         params: {},
         query: {},
+        data: {},
       })
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
@@ -1031,6 +1044,7 @@ describe('interface', () => {
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/123', {
         params: {},
         query: {},
+        data: {},
       })
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
@@ -1066,6 +1080,7 @@ describe('interface', () => {
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/123', {
         params: {},
         query: {},
+        data: {},
       })
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
@@ -1131,6 +1146,53 @@ describe('interface', () => {
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/', {
         params: {},
         query: {},
+        data: {},
+      })
+
+      expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
+    })
+
+    test('when matched with extra metadata', () => {
+      const NAV_ITEMS = [
+        {
+          exact: false,
+          path: '/photos',
+          extra1: 'a',
+          extra2: 'b',
+          resolver: vi.fn(() => '<p>ROOT</p>'),
+        },
+        {
+          exact: true,
+          path: '/users',
+          extra3: 'c',
+          extra4: 'd',
+          resolver: vi.fn(() => '<p>USERS</p>'),
+        },
+        {
+          exact: false,
+          path: '/appointments',
+          extra5: 'e',
+          extra6: 'f',
+          resolver: vi.fn(() => '<p>USER ID</p>'),
+        },
+      ]
+
+      window.location.pathname = '/users'
+
+      const result = router.matchSwitch(NAV_ITEMS)
+
+      expect(result).toBe('<p>USERS</p>')
+      expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
+
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
+
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/', {
+        params: {},
+        query: {},
+        data: {
+          extra3: 'c',
+          extra4: 'd',
+        },
       })
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
