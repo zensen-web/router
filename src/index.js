@@ -8,6 +8,8 @@ const OPERATION = {
 }
 
 let __initialized = false
+let __prevLocationHref = ''
+let __previousSegments = []
 
 /*
   TEMPORARY:
@@ -126,6 +128,16 @@ function getQuery () {
   const params = new URLSearchParams(window.location.search)
 
   return Object.fromEntries(params)
+}
+
+function getSegments () {
+  if (window.location.href !== __prevLocationHref) {
+    const { href, pathname} = window.location
+    __previousSegments = pathname.split('/').filter(Boolean)
+    __prevLocationHref = href
+  }
+
+  return __previousSegments
 }
 
 function navigate (routePath, query = null) {
@@ -278,6 +290,7 @@ export default {
   getPath,
   getHash,
   getQuery,
+  getSegments,
   navigate,
   redirect,
   match,

@@ -336,7 +336,7 @@ describe('global events', () => {
     router.shutdown()
   })
 
-  test('when NO "window.location.origin" AND anchor tag IS same origin', () => {
+  test('when NO "location.origin" AND anchor tag IS same origin', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
     window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
@@ -363,7 +363,7 @@ describe('global events', () => {
     router.shutdown()
   })
 
-  test('when NO "window.location.origin" AND anchor tag NOT same origin', () => {
+  test('when NO "location.origin" AND anchor tag NOT same origin', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
     window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
@@ -390,7 +390,7 @@ describe('global events', () => {
     router.shutdown()
   })
 
-  test('when "window.location.origin" EXISTS AND anchor tag IS same origin', () => {
+  test('when "location.origin" EXISTS AND anchor tag IS same origin', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
     window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
@@ -417,7 +417,7 @@ describe('global events', () => {
     router.shutdown()
   })
 
-  test('when "window.location.origin" EXISTS AND anchor tag NOT same origin', () => {
+  test('when "location.origin" EXISTS AND anchor tag NOT same origin', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
     window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
@@ -444,7 +444,7 @@ describe('global events', () => {
     router.shutdown()
   })
 
-  test('when anchor tag href IS different "window.location.href"', () => {
+  test('when anchor tag href IS different "location.href"', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
     window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
@@ -598,6 +598,44 @@ describe('interface', () => {
       expect(router.getQuery()).toEqual({
         foo: 'bar',
       })
+    })
+  })
+
+  describe('getSegments()', () => {
+    test('when "location.pathname" has no beginning or ending slashes', () => {
+      window.location.pathname = 'users/123'
+
+      expect(router.getSegments()).toEqual([
+        'users',
+        '123',
+      ])
+    })
+
+    test('when "location.pathname" has a beginning slash', () => {
+      window.location.pathname = '/users/123'
+
+      expect(router.getSegments()).toEqual([
+        'users',
+        '123',
+      ])
+    })
+
+    test('when "location.pathname" has an ending slash', () => {
+      window.location.pathname = 'users/123/'
+
+      expect(router.getSegments()).toEqual([
+        'users',
+        '123',
+      ])
+    })
+
+    test('when "location.pathname" has slashes on both ends', () => {
+      window.location.pathname = '/users/123/'
+
+      expect(router.getSegments()).toEqual([
+        'users',
+        '123',
+      ])
     })
   })
 
