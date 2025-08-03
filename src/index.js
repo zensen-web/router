@@ -68,32 +68,27 @@ function __buildParams (pattern, keys, querylessRoute) {
   )
 }
 
-function __resolveRoute (pattern, keys, routePath, item) {
+function __resolveRoute (pattern, keys, routePath, navItem, data) {
   const reg = new RegExp(pattern)
   const trimmed = routePath.replace(reg, '')
   const routeTail = trimmed.indexOf('/') !== 0 ? `/${trimmed}` : '/'
-  const data = { ...item }
-
-  delete data.exact
-  delete data.path
-  delete data.redirect
-  delete data.resolver
 
   const ctx = {
     routeTail,
+    navItem,
     params: __buildParams(pattern, keys, routePath),
     query: getQuery(),
     data,
   }
 
-  if (item.redirect) {
-    const redirectPath = item.redirect(ctx)
+  if (navItem.redirect) {
+    const redirectPath = navItem.redirect(ctx)
     navigate(redirectPath)
 
     return ''
   }
 
-  return item.resolver(ctx)
+  return navItem.resolver(ctx)
 }
 
 function __changeRoute (href, query, operation) {
@@ -177,25 +172,7 @@ function redirect (routePath, query = null) {
   __changeRoute(href, query, OPERATION.REPLACE)
 }
 
-function match (path, resolver, {
-  routePath = null,
-  exact = false,
-  data = {},
-} = {}) {
-  __validateInitialized()
-
-  const p = routePath !== null ? routePath : getPath()
-  const { pattern, keys } = __regexparam(path, !exact)
-
-  return pattern.test(p)
-    ? __resolveRoute(pattern, keys, p, {
-      ...data,
-      resolver,
-    })
-    : ''
-}
-
-function matchSwitch (items, routePath = null) {
+function matchSwitch (items, routePath = null, data = {}) {
   __validateInitialized()
 
   let result = {}
@@ -211,12 +188,7 @@ function matchSwitch (items, routePath = null) {
   const { pattern, keys } = result
 
   return matchedRoute
-    ? __resolveRoute(
-      pattern,
-      keys,
-      p,
-      matchedRoute,
-    )
+    ? __resolveRoute(pattern, keys, p, matchedRoute, data)
     : ''
 }
 
@@ -304,6 +276,5 @@ export default {
   getSegments,
   navigate,
   redirect,
-  match,
   matchSwitch,
 }

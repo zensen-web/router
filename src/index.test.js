@@ -545,13 +545,6 @@ describe('NOT initialized', () => {
     expect(fn).toThrowError(new Error('Router is not initialized'))
   })
 
-  test('when match() is invoked', () => {
-    const resolverStub = vi.fn()
-    const fn = () => router.match('/users/123', resolverStub)
-
-    expect(fn).toThrowError(new Error('Router is not initialized'))
-  })
-
   test('when matchSwitch() is invoked', () => {
     const resolverStub = vi.fn()
     const fn = () => router.matchSwitch('/users/123', resolverStub)
@@ -719,260 +712,8 @@ describe('interface', () => {
     })
   })
 
-  describe('match()', () => {
-    const RESULT = '<p>HERE</p>'
-
-    let resolverStub = null
-
-    beforeEach(() => {
-      resolverStub = vi.fn()
-      resolverStub.mockReturnValue(RESULT)
-    })
-
-    test('when path is static NO match', () => {
-      window.location.pathname = '/users/123'
-
-      const result = router.match('/photos/456', resolverStub)
-
-      expect(result).toBe('')
-      expect(resolverStub).not.toHaveBeenCalled()
-    })
-
-    test('when path is static WITH match', () => {
-      window.location.pathname = '/users/123'
-
-      const result = router.match('/users/123', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when matched AND input route has trailing slash', () => {
-      window.location.pathname = '/users/123/'
-
-      const result = router.match('/users/123', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when matched AND pattern has trailing slash', () => {
-      window.location.pathname = '/users/123'
-
-      const result = router.match('/users/123/', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when matched AND input route AND pattern have trailing slashs', () => {
-      window.location.pathname = '/users/123/'
-
-      const result = router.match('/users/123/', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when path is static NO match AND query', () => {
-      window.location.pathname = '/users/123?a=foo&b=bar'
-      window.location.search = 'a=foo&b=bar'
-
-      const result = router.match('/photos/456', resolverStub)
-
-      expect(result).toBe('')
-      expect(resolverStub).not.toHaveBeenCalled()
-    })
-
-    test('when path is static WITH match AND query', () => {
-      window.location.pathname = '/users/123'
-      window.location.search = 'a=foo&b=bar'
-
-      const result = router.match('/users/123', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {
-          a: 'foo',
-          b: 'bar',
-        },
-        data: {},
-      })
-    })
-
-    test('when path contains dynamic segments WITH match', () => {
-      window.location.pathname = '/users/123/photos/456'
-
-      const result = router.match('/users/:userId/photos/:photoId', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {
-          userId: '123',
-          photoId: '456',
-        },
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when path contains dynamic segments NO match', () => {
-      window.location.pathname = '/users/123'
-
-      const result = router.match('/photos/:photoId', resolverStub)
-
-      expect(result).toBe('')
-      expect(resolverStub).not.toHaveBeenCalled()
-    })
-
-    test('when input route is SHORTER than the matching pattern', () => {
-      window.location.pathname = '/users'
-
-      const result = router.match('/users/:userId', resolverStub)
-
-      expect(result).toBe('')
-      expect(resolverStub).not.toHaveBeenCalled()
-    })
-
-    test('when input route is LONGER than the matching pattern', () => {
-      window.location.pathname = '/users/123/photos/456'
-
-      const result = router.match('/users/:userId', resolverStub)
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/photos/456',
-        params: {
-          userId: '123',
-        },
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when "routePath" is provided', () => {
-      window.location.pathname = '/'
-
-      const result = router.match('/users/123', resolverStub, {
-        routePath: '/users/123',
-      })
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when "exact" is "false" WITH longer path (beginning matches)', () => {
-      window.location.pathname = '/users/123/photos/456'
-
-      const result = router.match('/users/123', resolverStub, {
-        exact: false,
-      })
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/photos/456',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when "exact" is "false" WITH identical path', () => {
-      window.location.pathname = '/users/123'
-
-      const result = router.match('/users/123', resolverStub, {
-        exact: false,
-      })
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-
-    test('when "exact" is "true" WITH longer path (beginning matches)', () => {
-      window.location.pathname = '/users/123/photos/456'
-
-      const result = router.match('/users/123', resolverStub, {
-        exact: true,
-      })
-
-      expect(result).toBe('')
-      expect(resolverStub).not.toHaveBeenCalled()
-    })
-
-    test('when "exact" is "true" identical path', () => {
-      window.location.pathname = '/users/123'
-
-      const result = router.match('/users/123', resolverStub, {
-        exact: true,
-      })
-
-      expect(result).toBe(RESULT)
-      expect(resolverStub).toHaveBeenCalledOnce()
-
-      expect(resolverStub).toHaveBeenCalledWith({
-        routeTail: '/',
-        params: {},
-        query: {},
-        data: {},
-      })
-    })
-  })
-
   describe('matchSwitch()', () => {
-    test('when NOT matching paths are provided', () => {
+    test('when NO matching paths are provided', () => {
       const NAV_ITEMS = [
         {
           path: '/users',
@@ -1024,6 +765,7 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
         routeTail: '/',
+        navItem: NAV_ITEMS[1],
         params: {
           userId: '123',
         },
@@ -1060,6 +802,7 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
         routeTail: '/123',
+        navItem: NAV_ITEMS[1],
         params: {},
         query: {},
         data: {},
@@ -1094,6 +837,7 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
         routeTail: '/123',
+        navItem: NAV_ITEMS[1],
         params: {},
         query: {},
         data: {},
@@ -1131,6 +875,7 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
         routeTail: '/123',
+        navItem: NAV_ITEMS[1],
         params: {},
         query: {},
         data: {},
@@ -1198,6 +943,7 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
         routeTail: '/',
+        navItem: NAV_ITEMS[1],
         params: {},
         query: {},
         data: {},
@@ -1242,12 +988,10 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
         routeTail: '/',
+        navItem: NAV_ITEMS[1],
         params: {},
         query: {},
-        data: {
-          extra3: 'c',
-          extra4: 'd',
-        },
+        data: {},
       })
 
       expect(NAV_ITEMS[2].resolver).not.toHaveBeenCalled()
@@ -1277,6 +1021,7 @@ describe('interface', () => {
       expect(NAV_ITEMS[1].redirect).toHaveBeenCalledOnce()
       expect(NAV_ITEMS[1].redirect).toHaveBeenCalledWith({
         routeTail: '/',
+        navItem: NAV_ITEMS[1],
         params: {},
         query: {},
         data: {},
