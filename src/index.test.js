@@ -746,7 +746,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -761,7 +762,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -776,7 +778,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -791,7 +794,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -817,7 +821,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {
           a: 'foo',
@@ -835,7 +840,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {
           userId: '123',
           photoId: '456',
@@ -871,7 +877,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/photos/456', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/photos/456',
         params: {
           userId: '123',
         },
@@ -890,7 +897,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -907,7 +915,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/photos/456', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/photos/456',
         params: {},
         query: {},
         data: {},
@@ -924,7 +933,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -952,7 +962,8 @@ describe('interface', () => {
       expect(result).toBe(RESULT)
       expect(resolverStub).toHaveBeenCalledOnce()
 
-      expect(resolverStub).toHaveBeenCalledWith('/', {
+      expect(resolverStub).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -1011,7 +1022,8 @@ describe('interface', () => {
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
 
-      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/', {
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {
           userId: '123',
         },
@@ -1046,7 +1058,8 @@ describe('interface', () => {
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
 
-      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/123', {
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
+        routeTail: '/123',
         params: {},
         query: {},
         data: {},
@@ -1079,7 +1092,8 @@ describe('interface', () => {
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
 
-      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/123', {
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
+        routeTail: '/123',
         params: {},
         query: {},
         data: {},
@@ -1115,7 +1129,8 @@ describe('interface', () => {
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
 
-      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/123', {
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
+        routeTail: '/123',
         params: {},
         query: {},
         data: {},
@@ -1181,7 +1196,8 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
 
-      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/', {
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {},
@@ -1224,7 +1240,8 @@ describe('interface', () => {
 
       expect(NAV_ITEMS[1].resolver).toHaveBeenCalledOnce()
 
-      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith('/', {
+      expect(NAV_ITEMS[1].resolver).toHaveBeenCalledWith({
+        routeTail: '/',
         params: {},
         query: {},
         data: {
@@ -1244,7 +1261,7 @@ describe('interface', () => {
         },
         {
           path: '/users',
-          redirect: '/users/123',
+          redirect: vi.fn(() => '/users/123'),
           resolver: vi.fn(() => '<p>USERS</p>'),
         },
       ]
@@ -1256,6 +1273,15 @@ describe('interface', () => {
       expect(result).toBe('')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
       expect(NAV_ITEMS[1].resolver).not.toHaveBeenCalled()
+
+      expect(NAV_ITEMS[1].redirect).toHaveBeenCalledOnce()
+      expect(NAV_ITEMS[1].redirect).toHaveBeenCalledWith({
+        routeTail: '/',
+        params: {},
+        query: {},
+        data: {},
+      })
+
       expect(window.history.pushState).toHaveBeenCalledOnce()
       expect(window.history.pushState).toHaveBeenCalledWith(
         {},
