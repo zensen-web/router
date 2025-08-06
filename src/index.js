@@ -103,13 +103,17 @@ function __changeRoute (href, query, operation) {
 
   if (result) {
     if (operation) {
-      if (query) {
-        const params = new URLSearchParams(query)
+      const params = query && new URLSearchParams(query)
 
-        window.location.search = params.toString()
-      }
+      const querystring = params
+        ? params.toString()
+        : window.location.search
 
-      window.history[operation]({}, '', pathname)
+      const href = [pathname, querystring]
+        .filter(item => item)
+        .join('?')
+
+      window.history[operation]({}, '', href)
     }
 
     window.dispatchEvent(

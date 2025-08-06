@@ -666,9 +666,8 @@ describe('interface', () => {
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
       expect(changeEventStub).toHaveBeenCalledOnce()
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
-      expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/users/123')
+      expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/users/123?a=foo&b=bar')
       expect(window.history.replaceState).not.toHaveBeenCalled()
-      expect(window.location.search).toBe('a=foo&b=bar')
     })
   })
 
@@ -707,8 +706,7 @@ describe('interface', () => {
       expect(changeEventStub).toHaveBeenCalledOnce()
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
       expect(window.history.pushState).not.toHaveBeenCalled()
-      expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/users/123')
-      expect(window.location.search).toBe('a=foo&b=bar')
+      expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/users/123?a=foo&b=bar')
     })
   })
 
