@@ -46,8 +46,11 @@ function __regexparam (str, loose) {
 }
 /* v8 ignore end */
 
-function __isRouteDifferent (routePath) {
-  return routePath !== window.location.pathname
+function __isRouteDifferent (routePath, querystring) {
+  return (
+    routePath !== window.location.pathname ||
+    querystring !== window.location.search
+  )
 }
 
 function __validateInitialized () {
@@ -66,6 +69,14 @@ function __buildParams (pattern, keys, querylessRoute) {
     }),
     {}
   )
+}
+
+function __buildQuerystring (query) {
+  const params = query && new URLSearchParams(query)
+
+  return params
+    ? params.toString()
+    : window.location.search
 }
 
 function __resolveRoute (pattern, keys, routePath, navItem, data) {
@@ -91,7 +102,7 @@ function __resolveRoute (pattern, keys, routePath, navItem, data) {
   return navItem.resolver(ctx)
 }
 
-function __changeRoute (href, query, operation) {
+function __changeRoute (href, querystring, operation) {
   const { pathname } = new URL(href)
 
   const result = window.dispatchEvent(
@@ -103,12 +114,6 @@ function __changeRoute (href, query, operation) {
 
   if (result) {
     if (operation) {
-      const params = query && new URLSearchParams(query)
-
-      const querystring = params
-        ? params.toString()
-        : window.location.search
-
       const href = [pathname, querystring]
         .filter(item => item)
         .join('?')
@@ -153,27 +158,31 @@ function getSegments () {
 function navigate (routePath, query = null) {
   __validateInitialized()
 
-  if (!__isRouteDifferent(routePath)) {
+  const querystring = __buildQuerystring(query)
+
+  if (!__isRouteDifferent(routePath, querystring)) {
     return
   }
 
   const { origin, hash } = window.location
   const href = `${origin}${routePath}${hash}`
 
-  __changeRoute(href, query, OPERATION.PUSH)
+  __changeRoute(href, querystring, OPERATION.PUSH)
 }
 
 function redirect (routePath, query = null) {
   __validateInitialized()
 
-  if (!__isRouteDifferent(routePath)) {
+  const querystring = __buildQuerystring(query)
+
+  if (!__isRouteDifferent(routePath, querystring)) {
     return
   }
 
   const { origin, hash} = window.location
   const href = `${origin}${routePath}${hash}`
 
-  __changeRoute(href, query, OPERATION.REPLACE)
+  __changeRoute(href, querystring, OPERATION.REPLACE)
 }
 
 function matchSwitch (items, routePath = null, data = {}) {

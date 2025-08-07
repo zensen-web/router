@@ -633,17 +633,83 @@ describe('interface', () => {
   })
 
   describe('navigate()', () => {
-    test('when navigating to the current route', () => {
+    test('when navigating to same route AND same querystring', () => {
       window.location.pathname = '/users/123'
+      window.location.search = 'a=foo'
 
-      router.navigate('/users/123')
+      router.navigate('/users/123', {
+        a: 'foo',
+      })
 
       expect(shouldChangeEventStub).not.toHaveBeenCalled()
       expect(changeEventStub).not.toHaveBeenCalled()
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
       expect(window.history.pushState).not.toHaveBeenCalled()
       expect(window.history.replaceState).not.toHaveBeenCalled()
-      expect(window.location.search).toBe('')
+    })
+
+    test('when navigating to same route AND different querystring', () => {
+      window.location.pathname = '/users/123'
+      window.location.search = 'a=foo'
+
+      router.navigate('/users/123', {
+        a: 'bar',
+      })
+
+      expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+      expect(changeEventStub).toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+
+      expect(window.history.pushState).toHaveBeenCalledOnce()
+      expect(window.history.pushState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/users/123?a=bar',
+      )
+
+      expect(window.history.replaceState).not.toHaveBeenCalled()
+    })
+
+    test('when navigating to different route AND same querystring', () => {
+      window.location.pathname = '/users/123'
+      window.location.search = 'a=foo'
+
+      router.navigate('/photos/123?a=foo')
+
+      expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+      expect(changeEventStub).toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+
+      expect(window.history.pushState).toHaveBeenCalledOnce()
+      expect(window.history.pushState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/photos/123?a=foo',
+      )
+
+      expect(window.history.replaceState).not.toHaveBeenCalled()
+    })
+
+    test('when navigating to different route AND different querystring', () => {
+      window.location.pathname = '/users/123'
+      window.location.search = 'a=foo'
+
+      router.navigate('/photos/123', {
+        a: 'bar',
+      })
+
+      expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+      expect(changeEventStub).toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+
+      expect(window.history.pushState).toHaveBeenCalledOnce()
+      expect(window.history.pushState).toHaveBeenCalledWith(
+        {},
+        '',
+        '/photos/123?a=bar',
+      )
+
+      expect(window.history.replaceState).not.toHaveBeenCalled()
     })
 
     test('when invoked with NO query', () => {
