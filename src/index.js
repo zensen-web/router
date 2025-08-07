@@ -184,7 +184,8 @@ function navigate (routePath, query = null) {
   }
 
   const { origin, hash } = window.location
-  const href = `${origin}${routePath}${hash}`
+  const pathname = routePath.split('?')[0]
+  const href = `${origin}${pathname}${hash}`
 
   __changeRoute(href, querystring, OPERATION.PUSH)
 }
@@ -199,7 +200,8 @@ function redirect (routePath, query = null) {
   }
 
   const { origin, hash} = window.location
-  const href = `${origin}${routePath}${hash}`
+  const pathname = routePath.split('?')[0]
+  const href = `${origin}${pathname}${hash}`
 
   __changeRoute(href, querystring, OPERATION.REPLACE)
 }
@@ -208,7 +210,7 @@ function matchSwitch (items, routePath = null, data = {}) {
   __validateInitialized()
 
   let result = {}
-  const p = routePath !== null ? routePath : getPath()
+  const p = routePath !== null ? routePath.split('?')[0] : getPath()
 
   const matchedRoute = items.find(item => {
     const exact = item.exact !== undefined ? item.exact : false
