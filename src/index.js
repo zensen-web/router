@@ -121,9 +121,16 @@ function __changeRoute (href, querystring, operation) {
       window.history[operation]({}, '', href)
     }
 
+    const full = [pathname, querystring].filter(Boolean).join('?')
+
     window.dispatchEvent(
       new CustomEvent(EVENT_ROUTE_CHANGE, {
-        detail: pathname,
+        detail: {
+          full,
+          pathname,
+          querystring,
+          operation,
+        },
       })
     )
   } else {
