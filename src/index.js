@@ -138,7 +138,15 @@ function __changeRoute (href, querystring, operation) {
       })
     )
   } else {
-    window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL))
+    window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL, {
+      cancelable: true,
+      detail: {
+        full,
+        pathname,
+        querystring,
+        operation,
+      },
+    }))
   }
 }
 

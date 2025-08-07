@@ -549,6 +549,7 @@ describe('global events', () => {
     handleAnchorClick(event)
 
     const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
+    const cancelEventCall = cancelEventStub.mock.calls[0][0]
 
     expect(shouldChangeEventStub).toHaveBeenCalledOnce()
 
@@ -561,6 +562,14 @@ describe('global events', () => {
 
     expect(changeEventStub).not.toHaveBeenCalled()
     expect(cancelEventStub).toHaveBeenCalledOnce()
+
+    expect(cancelEventCall.detail).toEqual({
+      full: '/users/123',
+      pathname: '/users/123',
+      querystring: null,
+      operation: 'pushState',
+    })
+
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
