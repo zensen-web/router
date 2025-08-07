@@ -87,8 +87,17 @@ describe('global events', () => {
     router.initialize()
 
     const changeEventCall = changeEventStub.mock.calls[0][0]
+    const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
     expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+    expect(shouldChangeEventCall.detail).toEqual({
+      full: '/',
+      pathname: '/',
+      querystring: null,
+      operation: null,
+    })
+
     expect(changeEventStub).toHaveBeenCalledOnce()
 
     expect(changeEventCall.detail).toEqual({
@@ -539,7 +548,17 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
+    const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
+
     expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+    expect(shouldChangeEventCall.detail).toEqual({
+      full: '/users/123',
+      pathname: '/users/123',
+      querystring: null,
+      operation: 'pushState',
+    })
+
     expect(changeEventStub).not.toHaveBeenCalled()
     expect(cancelEventStub).toHaveBeenCalledOnce()
     expect(window.history.pushState).not.toHaveBeenCalled()
@@ -677,8 +696,17 @@ describe('interface', () => {
       })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/users/123?a=bar',
+        pathname: '/users/123',
+        querystring: 'a=bar',
+        operation: 'pushState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -707,8 +735,17 @@ describe('interface', () => {
       router.navigate('/photos/123?a=foo')
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/photos/123?a=foo',
+        pathname: '/photos/123',
+        querystring: 'a=foo',
+        operation: 'pushState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -739,8 +776,17 @@ describe('interface', () => {
       })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/photos/123?a=bar',
+        pathname: '/photos/123',
+        querystring: 'a=bar',
+        operation: 'pushState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -766,8 +812,17 @@ describe('interface', () => {
       router.navigate('/users/123')
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/users/123',
+        pathname: '/users/123',
+        querystring: '',
+        operation: 'pushState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -790,8 +845,17 @@ describe('interface', () => {
       })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/users/123?a=foo&b=bar',
+        pathname: '/users/123',
+        querystring: 'a=foo&b=bar',
+        operation: 'pushState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -832,8 +896,17 @@ describe('interface', () => {
       })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/users/123?a=bar',
+        pathname: '/users/123',
+        querystring: 'a=bar',
+        operation: 'replaceState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -861,8 +934,17 @@ describe('interface', () => {
       router.redirect('/photos/123?a=foo')
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/photos/123?a=foo',
+        pathname: '/photos/123',
+        querystring: 'a=foo',
+        operation: 'replaceState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -892,8 +974,17 @@ describe('interface', () => {
       })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/photos/123?a=bar',
+        pathname: '/photos/123',
+        querystring: 'a=bar',
+        operation: 'replaceState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({
@@ -918,8 +1009,17 @@ describe('interface', () => {
       router.redirect('/users/123')
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/users/123',
+        pathname: '/users/123',
+        querystring: '',
+        operation: 'replaceState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
       expect(window.history.pushState).not.toHaveBeenCalled()
@@ -934,8 +1034,17 @@ describe('interface', () => {
       })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
+      const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
 
       expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+
+      expect(shouldChangeEventCall.detail).toEqual({
+        full: '/users/123?a=foo&b=bar',
+        pathname: '/users/123',
+        querystring: 'a=foo&b=bar',
+        operation: 'replaceState',
+      })
+
       expect(changeEventStub).toHaveBeenCalledOnce()
 
       expect(changeEventCall.detail).toEqual({

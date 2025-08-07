@@ -104,11 +104,17 @@ function __resolveRoute (pattern, keys, routePath, navItem, data) {
 
 function __changeRoute (href, querystring, operation) {
   const { pathname } = new URL(href)
+  const full = [pathname, querystring].filter(Boolean).join('?')
 
   const result = window.dispatchEvent(
     new CustomEvent(EVENT_ROUTE_SHOULD_CHANGE, {
-      detail: pathname,
       cancelable: true,
+      detail: {
+        full,
+        pathname,
+        querystring,
+        operation,
+      },
     }),
   )
 
@@ -120,8 +126,6 @@ function __changeRoute (href, querystring, operation) {
 
       window.history[operation]({}, '', href)
     }
-
-    const full = [pathname, querystring].filter(Boolean).join('?')
 
     window.dispatchEvent(
       new CustomEvent(EVENT_ROUTE_CHANGE, {
