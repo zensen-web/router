@@ -49,7 +49,7 @@ function __regexparam (str, loose) {
 function __isRouteDifferent (routePath, querystring) {
   return (
     routePath !== window.location.pathname ||
-    querystring !== window.location.search
+    querystring !== window.location.search.substring(1)
   )
 }
 
@@ -76,7 +76,7 @@ function __buildQuerystring (query) {
 
   return params
     ? params.toString()
-    : window.location.search
+    : window.location.search.substring(1)
 }
 
 function __resolveRoute (pattern, keys, routePath, navItem, data) {
