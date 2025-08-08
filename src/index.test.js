@@ -94,8 +94,8 @@ describe('global events', () => {
     expect(shouldChangeEventCall.detail).toEqual({
       full: '/',
       pathname: '/',
-      querystring: null,
       operation: null,
+      query: null,
     })
 
     expect(changeEventStub).toHaveBeenCalledOnce()
@@ -103,8 +103,8 @@ describe('global events', () => {
     expect(changeEventCall.detail).toEqual({
       full: '/',
       pathname: '/',
-      querystring: null,
       operation: null,
+      query: null,
     })
 
     expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -492,8 +492,8 @@ describe('global events', () => {
     expect(changeEventCall.detail).toEqual({
       full: '/users/123',
       pathname: '/users/123',
-      querystring: null,
       operation: 'pushState',
+      query: null,
     })
 
     expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -556,8 +556,8 @@ describe('global events', () => {
     expect(shouldChangeEventCall.detail).toEqual({
       full: '/users/123',
       pathname: '/users/123',
-      querystring: null,
       operation: 'pushState',
+      query: null,
     })
 
     expect(changeEventStub).not.toHaveBeenCalled()
@@ -566,8 +566,8 @@ describe('global events', () => {
     expect(cancelEventCall.detail).toEqual({
       full: '/users/123',
       pathname: '/users/123',
-      querystring: null,
       operation: 'pushState',
+      query: null,
     })
 
     expect(window.history.pushState).not.toHaveBeenCalled()
@@ -712,8 +712,10 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/users/123?a=bar',
         pathname: '/users/123',
-        querystring: 'a=bar',
         operation: 'pushState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -721,8 +723,10 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/users/123?a=bar',
         pathname: '/users/123',
-        querystring: 'a=bar',
         operation: 'pushState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -741,7 +745,9 @@ describe('interface', () => {
       window.location.pathname = '/users/123'
       window.location.search = '?a=foo'
 
-      router.navigate('/photos/123?a=foo')
+      router.navigate('/photos/123', {
+        a: 'foo',
+      })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
       const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
@@ -751,8 +757,10 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/photos/123?a=foo',
         pathname: '/photos/123',
-        querystring: 'a=foo',
         operation: 'pushState',
+        query: {
+          a: 'foo',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -760,8 +768,10 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/photos/123?a=foo',
         pathname: '/photos/123',
-        querystring: 'a=foo',
         operation: 'pushState',
+        query: {
+          a: 'foo',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -792,8 +802,10 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/photos/123?a=bar',
         pathname: '/photos/123',
-        querystring: 'a=bar',
         operation: 'pushState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -801,8 +813,10 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/photos/123?a=bar',
         pathname: '/photos/123',
-        querystring: 'a=bar',
         operation: 'pushState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -828,8 +842,8 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/users/123',
         pathname: '/users/123',
-        querystring: '',
         operation: 'pushState',
+        query: null,
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -837,8 +851,8 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/users/123',
         pathname: '/users/123',
-        querystring: '',
         operation: 'pushState',
+        query: null,
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -861,8 +875,11 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/users/123?a=foo&b=bar',
         pathname: '/users/123',
-        querystring: 'a=foo&b=bar',
         operation: 'pushState',
+        query: {
+          a: 'foo',
+          b: 'bar',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -870,8 +887,11 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/users/123?a=foo&b=bar',
         pathname: '/users/123',
-        querystring: 'a=foo&b=bar',
         operation: 'pushState',
+        query: {
+          a: 'foo',
+          b: 'bar',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -912,8 +932,10 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/users/123?a=bar',
         pathname: '/users/123',
-        querystring: 'a=bar',
         operation: 'replaceState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -921,8 +943,10 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/users/123?a=bar',
         pathname: '/users/123',
-        querystring: 'a=bar',
         operation: 'replaceState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -940,7 +964,9 @@ describe('interface', () => {
       window.location.pathname = '/users/123'
       window.location.search = '?a=foo'
 
-      router.redirect('/photos/123?a=foo')
+      router.redirect('/photos/123', {
+        a: 'foo',
+      })
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
       const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
@@ -950,8 +976,10 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/photos/123?a=foo',
         pathname: '/photos/123',
-        querystring: 'a=foo',
         operation: 'replaceState',
+        query: {
+          a: 'foo',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -959,8 +987,10 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/photos/123?a=foo',
         pathname: '/photos/123',
-        querystring: 'a=foo',
         operation: 'replaceState',
+        query: {
+          a: 'foo',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -990,8 +1020,10 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/photos/123?a=bar',
         pathname: '/photos/123',
-        querystring: 'a=bar',
         operation: 'replaceState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -999,8 +1031,10 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/photos/123?a=bar',
         pathname: '/photos/123',
-        querystring: 'a=bar',
         operation: 'replaceState',
+        query: {
+          a: 'bar',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()
@@ -1025,8 +1059,8 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/users/123',
         pathname: '/users/123',
-        querystring: '',
         operation: 'replaceState',
+        query: null,
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -1050,8 +1084,11 @@ describe('interface', () => {
       expect(shouldChangeEventCall.detail).toEqual({
         full: '/users/123?a=foo&b=bar',
         pathname: '/users/123',
-        querystring: 'a=foo&b=bar',
         operation: 'replaceState',
+        query: {
+          a: 'foo',
+          b: 'bar',
+        },
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -1059,8 +1096,11 @@ describe('interface', () => {
       expect(changeEventCall.detail).toEqual({
         full: '/users/123?a=foo&b=bar',
         pathname: '/users/123',
-        querystring: 'a=foo&b=bar',
         operation: 'replaceState',
+        query: {
+          a: 'foo',
+          b: 'bar',
+        },
       })
 
       expect(cancelEventStub).not.toHaveBeenCalledOnce()

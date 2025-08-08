@@ -46,7 +46,9 @@ function __regexparam (str, loose) {
 }
 /* v8 ignore end */
 
-function __isRouteDifferent (routePath, querystring) {
+function __isRouteDifferent (routePath, query) {
+  const querystring = __buildQuerystring(query)
+
   return (
     routePath !== window.location.pathname ||
     querystring !== window.location.search.substring(1)
@@ -102,8 +104,9 @@ function __resolveRoute (pattern, keys, routePath, navItem, data) {
   return navItem.resolver(ctx)
 }
 
-function __changeRoute (href, querystring, operation) {
+function __changeRoute (href, query, operation) {
   const { pathname } = new URL(href)
+  const querystring = __buildQuerystring(query)
   const full = [pathname, querystring].filter(Boolean).join('?')
 
   const result = window.dispatchEvent(
@@ -112,8 +115,8 @@ function __changeRoute (href, querystring, operation) {
       detail: {
         full,
         pathname,
-        querystring,
         operation,
+        query,
       },
     }),
   )
@@ -132,8 +135,8 @@ function __changeRoute (href, querystring, operation) {
         detail: {
           full,
           pathname,
-          querystring,
           operation,
+          query,
         },
       })
     )
@@ -143,8 +146,8 @@ function __changeRoute (href, querystring, operation) {
       detail: {
         full,
         pathname,
-        querystring,
         operation,
+        query,
       },
     }))
   }
@@ -177,9 +180,7 @@ function getSegments () {
 function navigate (routePath, query = null) {
   __validateInitialized()
 
-  const querystring = __buildQuerystring(query)
-
-  if (!__isRouteDifferent(routePath, querystring)) {
+  if (!__isRouteDifferent(routePath, query)) {
     return
   }
 
@@ -187,15 +188,13 @@ function navigate (routePath, query = null) {
   const pathname = routePath.split('?')[0]
   const href = `${origin}${pathname}${hash}`
 
-  __changeRoute(href, querystring, OPERATION.PUSH)
+  __changeRoute(href, query, OPERATION.PUSH)
 }
 
 function redirect (routePath, query = null) {
   __validateInitialized()
 
-  const querystring = __buildQuerystring(query)
-
-  if (!__isRouteDifferent(routePath, querystring)) {
+  if (!__isRouteDifferent(routePath, query)) {
     return
   }
 
@@ -203,7 +202,7 @@ function redirect (routePath, query = null) {
   const pathname = routePath.split('?')[0]
   const href = `${origin}${pathname}${hash}`
 
-  __changeRoute(href, querystring, OPERATION.REPLACE)
+  __changeRoute(href, query, OPERATION.REPLACE)
 }
 
 function matchSwitch (items, routePath = null, data = {}) {
