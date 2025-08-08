@@ -3,6 +3,7 @@ export const EVENT_ROUTE_CANCEL = 'routecancel'
 export const EVENT_ROUTE_SHOULD_CHANGE = 'routeshouldchange'
 
 const OPERATION = {
+  POP: 'popState',
   PUSH: 'pushState',
   REPLACE: 'replaceState',
 }
@@ -122,12 +123,27 @@ function __changeRoute (href, query, operation) {
   )
 
   if (result) {
-    if (operation) {
-      const href = [pathname, querystring]
-        .filter(item => item)
-        .join('?')
+    const href = [pathname, querystring]
+      .filter(item => item)
+      .join('?')
 
-      window.history[operation]({}, '', href)
+    switch (operation) {
+      case OPERATION.POP:
+        window.history.pushState({}, '', __prevLocationHref)
+        break
+
+      case OPERATION.PUSH:
+        __prevLocationHref = [
+          window.location.pathname,
+          window.location.search,
+        ].filter(Boolean).join('?')
+
+        window.history.pushState({}, '', href)
+        break
+
+      case OPERATION.REPLACE:
+        window.history.replaceState({}, '', href)
+        break
     }
 
     window.dispatchEvent(
@@ -168,13 +184,7 @@ function getQuery () {
 }
 
 function getSegments () {
-  if (window.location.href !== __prevLocationHref) {
-    const { href, pathname} = window.location
-    __previousSegments = pathname.split('/').filter(Boolean)
-    __prevLocationHref = href
-  }
-
-  return __previousSegments
+  return window.location.pathname.split('/').filter(Boolean)
 }
 
 function navigate (routePath, query = null) {
@@ -269,7 +279,7 @@ export function handleAnchorClick(event) {
 }
 
 export function handlePopState () {
-  __changeRoute(window.location.href, null, null)
+  __changeRoute(window.location.href, null, OPERATION.POP)
 }
 
 function isInitialized () {

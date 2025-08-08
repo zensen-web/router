@@ -5,6 +5,7 @@ import router, {
   EVENT_ROUTE_CHANGE,
   EVENT_ROUTE_SHOULD_CHANGE,
   handleAnchorClick,
+  handlePopState,
 } from './'
 
 import {
@@ -577,6 +578,45 @@ describe('global events', () => {
     window.removeEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
     window.removeEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
     router.shutdown()
+  })
+
+  test('when a "popState" event is handled', () => {
+    router.initialize()
+    window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
+    window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
+    window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
+
+    handlePopState()
+
+    window.removeEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
+    window.removeEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
+    window.removeEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
+    router.shutdown()
+
+    const shouldChangeEventCall = changeEventStub.mock.calls[0][0]
+    const changeEventCall = changeEventStub.mock.calls[0][0]
+
+    expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+    expect(shouldChangeEventCall.detail).toEqual({
+      full: '/',
+      pathname: '/',
+      operation: 'popState',
+      query: null,
+    })
+
+    expect(changeEventStub).toHaveBeenCalled()
+    expect(changeEventCall.detail).toEqual({
+      full: '/',
+      pathname: '/',
+      operation: 'popState',
+      query: null,
+    })
+
+    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(window.history.pushState).toHaveBeenCalledOnce()
+    expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/')
+
+    expect(window.history.replaceState).not.toHaveBeenCalled()
   })
 })
 
