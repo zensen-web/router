@@ -9,8 +9,7 @@ const OPERATION = {
 }
 
 let __initialized = false
-let __prevLocationHref = ''
-let __previousSegments = []
+let __currentHref = ''
 
 /*
   TEMPORARY:
@@ -105,6 +104,13 @@ function __resolveRoute (pattern, keys, routePath, navItem, data) {
   return navItem.resolver(ctx)
 }
 
+function __updateCurrentHref () {
+  __currentHref = [
+    window.location.pathname,
+    window.location.search,
+  ].filter(Boolean).join('')
+}
+
 function __changeRoute (href, query, operation) {
   const { pathname } = new URL(href)
   const querystring = __buildQuerystring(query)
@@ -127,23 +133,9 @@ function __changeRoute (href, query, operation) {
       .filter(item => item)
       .join('?')
 
-    switch (operation) {
-      case OPERATION.POP:
-        window.history.pushState({}, '', __prevLocationHref)
-        break
-
-      case OPERATION.PUSH:
-        __prevLocationHref = [
-          window.location.pathname,
-          window.location.search,
-        ].filter(Boolean).join('?')
-
-        window.history.pushState({}, '', href)
-        break
-
-      case OPERATION.REPLACE:
-        window.history.replaceState({}, '', href)
-        break
+    if (operation && operation !== OPERATION.POP) {
+      window.history[operation]({}, '', href)
+      __updateCurrentHref()
     }
 
     window.dispatchEvent(
@@ -157,6 +149,10 @@ function __changeRoute (href, query, operation) {
       })
     )
   } else {
+    if (operation && operation === OPERATION.POP) {
+      window.history.pushState({}, '', __currentHref)
+    }
+
     window.dispatchEvent(new CustomEvent(EVENT_ROUTE_CANCEL, {
       cancelable: true,
       detail: {

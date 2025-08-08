@@ -108,7 +108,7 @@ describe('global events', () => {
       query: null,
     })
 
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -140,9 +140,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -162,9 +162,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -184,9 +184,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -207,9 +207,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -229,9 +229,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -252,9 +252,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -275,9 +275,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -298,9 +298,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -321,9 +321,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -344,9 +344,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -371,9 +371,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -398,9 +398,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -425,9 +425,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -452,9 +452,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -497,7 +497,7 @@ describe('global events', () => {
       query: null,
     })
 
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/users/123')
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -519,9 +519,9 @@ describe('global events', () => {
 
     handleAnchorClick(event)
 
-    expect(shouldChangeEventStub).not.toHaveBeenCalledOnce()
+    expect(shouldChangeEventStub).not.toHaveBeenCalled()
     expect(changeEventStub).not.toHaveBeenCalled()
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
     expect(window.history.pushState).not.toHaveBeenCalled()
     expect(window.history.replaceState).not.toHaveBeenCalled()
 
@@ -580,7 +580,7 @@ describe('global events', () => {
     router.shutdown()
   })
 
-  test('when a "popState" event is handled', () => {
+  test('when a "popState" event is allowed', () => {
     router.initialize()
     window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
     window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
@@ -593,7 +593,7 @@ describe('global events', () => {
     window.removeEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
     router.shutdown()
 
-    const shouldChangeEventCall = changeEventStub.mock.calls[0][0]
+    const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
     const changeEventCall = changeEventStub.mock.calls[0][0]
 
     expect(shouldChangeEventStub).toHaveBeenCalledOnce()
@@ -604,7 +604,7 @@ describe('global events', () => {
       query: null,
     })
 
-    expect(changeEventStub).toHaveBeenCalled()
+    expect(changeEventStub).toHaveBeenCalledOnce()
     expect(changeEventCall.detail).toEqual({
       full: '/',
       pathname: '/',
@@ -612,10 +612,42 @@ describe('global events', () => {
       query: null,
     })
 
-    expect(cancelEventStub).not.toHaveBeenCalledOnce()
+    expect(cancelEventStub).not.toHaveBeenCalled()
+    expect(window.history.pushState).not.toHaveBeenCalled()
+    expect(window.history.replaceState).not.toHaveBeenCalled()
+  })
+
+  test('when a "popState" event is cancelled', () => {
+    shouldChangeEventStub.mockImplementation(event => {
+      event.preventDefault()
+    })
+
+    router.initialize()
+    window.addEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
+    window.addEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
+    window.addEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
+
+    handlePopState()
+
+    window.removeEventListener(EVENT_ROUTE_CANCEL, cancelEventStub)
+    window.removeEventListener(EVENT_ROUTE_CHANGE, changeEventStub)
+    window.removeEventListener(EVENT_ROUTE_SHOULD_CHANGE, shouldChangeEventStub)
+    router.shutdown()
+
+    const shouldChangeEventCall = shouldChangeEventStub.mock.calls[0][0]
+
+    expect(shouldChangeEventStub).toHaveBeenCalledOnce()
+    expect(shouldChangeEventCall.detail).toEqual({
+      full: '/',
+      pathname: '/',
+      operation: 'popState',
+      query: null,
+    })
+
+    expect(changeEventStub).not.toHaveBeenCalled()
+    expect(cancelEventStub).toHaveBeenCalledOnce()
     expect(window.history.pushState).toHaveBeenCalledOnce()
     expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/')
-
     expect(window.history.replaceState).not.toHaveBeenCalled()
   })
 })
@@ -731,7 +763,7 @@ describe('interface', () => {
 
       expect(shouldChangeEventStub).not.toHaveBeenCalled()
       expect(changeEventStub).not.toHaveBeenCalled()
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
       expect(window.history.replaceState).not.toHaveBeenCalled()
     })
@@ -769,7 +801,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
 
       expect(window.history.pushState).toHaveBeenCalledOnce()
       expect(window.history.pushState).toHaveBeenCalledWith(
@@ -814,7 +846,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
 
       expect(window.history.pushState).toHaveBeenCalledOnce()
       expect(window.history.pushState).toHaveBeenCalledWith(
@@ -859,7 +891,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
 
       expect(window.history.pushState).toHaveBeenCalledOnce()
       expect(window.history.pushState).toHaveBeenCalledWith(
@@ -895,7 +927,7 @@ describe('interface', () => {
         query: null,
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/users/123')
       expect(window.history.replaceState).not.toHaveBeenCalled()
       expect(window.location.search).toBe('')
@@ -934,7 +966,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/users/123?a=foo&b=bar')
       expect(window.history.replaceState).not.toHaveBeenCalled()
     })
@@ -951,7 +983,7 @@ describe('interface', () => {
 
       expect(shouldChangeEventStub).not.toHaveBeenCalled()
       expect(changeEventStub).not.toHaveBeenCalled()
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
       expect(window.history.replaceState).not.toHaveBeenCalled()
     })
@@ -989,7 +1021,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
 
       expect(window.history.replaceState).toHaveBeenCalledOnce()
@@ -1033,7 +1065,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
 
       expect(window.history.replaceState).toHaveBeenCalledOnce()
@@ -1077,7 +1109,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
 
       expect(window.history.replaceState).toHaveBeenCalledOnce()
@@ -1104,7 +1136,7 @@ describe('interface', () => {
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
       expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/users/123')
       expect(window.location.search).toBe('')
@@ -1143,7 +1175,7 @@ describe('interface', () => {
         },
       })
 
-      expect(cancelEventStub).not.toHaveBeenCalledOnce()
+      expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
       expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/users/123?a=foo&b=bar')
     })
