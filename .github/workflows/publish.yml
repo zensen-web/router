@@ -45,6 +45,7 @@ jobs:
 
       - name: Update package.json version
         run: bun pm version ${{ github.event.release.tag_name }}
+        working-directory: lib
 
       - name: Commit package.json
         env:
