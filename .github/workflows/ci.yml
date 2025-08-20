@@ -24,5 +24,5 @@ jobs:
         run: bun install --frozen-lockfile
         working-directory: lib
       - name: Test
-        run: bun test
+        run: bun run test
         working-directory: lib
