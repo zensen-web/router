@@ -1,0 +1,38 @@
+{
+  "name": "@zensen/router",
+  "version": "2.0.0",
+  "type": "module",
+  "license": "MIT",
+  "description": "A declarative router for native web components",
+  "author": "Travis True <travis.true08@gmail.com> (http://www.travistrue.io)",
+  "main": "src/index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zensen/router.git"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "scripts": {
+    "clean": "rm -rf node_modules",
+    "reinstall": "bun run clean && bun install",
+    "test": "vitest run --coverage",
+    "test:watch": "vitest --coverage"
+  },
+  "keywords": [
+    "component",
+    "declarative",
+    "route",
+    "router",
+    "routing",
+    "zen",
+    "zensen"
+  ],
+  "devDependencies": {
+    "@vitest/coverage-v8": "3.2.4",
+    "@zensen/eslint-config": "^1.0.0",
+    "eslint": "^5.16.0",
+    "jsdom": "^26.1.0",
+    "vitest": "^3.2.4"
+  }
+}
