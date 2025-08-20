@@ -47,16 +47,16 @@ jobs:
         run: bun pm version ${{ github.event.release.tag_name }}
         working-directory: lib
 
-      - name: Commit package.json
-        env:
-          GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
-        run: |
-          git config user.name 'Automated Publisher'
-          git config user.email 'automated-publisher[bot]@users.noreply.github.com'
-          git add package.json
-          git commit -m "Updated package.json version to ${{ github.event.release.tag_name }}"
-          git push origin HEAD:main
-        working-directory: lib
+      # - name: Commit package.json
+      #   env:
+      #     GITHUB_TOKEN: ${{ steps.app-token.outputs.token }}
+      #   run: |
+      #     git config user.name 'Automated Publisher'
+      #     git config user.email 'automated-publisher[bot]@users.noreply.github.com'
+      #     git add package.json
+      #     git commit -m "Updated package.json version to ${{ github.event.release.tag_name }}"
+      #     git push origin HEAD:main
+      #   working-directory: lib
 
       - name: Publish
         run: bun publish --access public
