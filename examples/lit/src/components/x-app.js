@@ -59,17 +59,19 @@ class App extends LitElement {
     super()
     router.initialize()
 
-    this.__route = router.getPath()
     this.__navItems = this.genNavItems()
+
+    this.__route = router.getPath()
 
     this.__handlers = {
       shouldChangeRoute: (event) => {
-        console.info(`shouldChangeRoute(): "${event.detail}"`)
+        console.info('shouldChangeRoute():', event.detail)
         // event.preventDefault()
       },
       changeRoute: event => {
-        console.info(`changeRoute(): "${event.detail}"`)
-        this.__route = event.detail
+        console.info('changeRoute():', event.detail)
+
+        this.__route = event.detail.pathname
       },
     }
   }
@@ -93,12 +95,10 @@ class App extends LitElement {
       {
         exact: false,
         path: '/about',
-        resolver: (routeTail) => {
-          console.info('routeTail:', routeTail)
-
+        resolver: (ctx) => {
           return html`
             <x-page-about
-              .routeTail=${routeTail}
+              .routeTail=${ctx.routeTail}
             ></x-page-about>
           `
         },
@@ -106,7 +106,7 @@ class App extends LitElement {
       {
         exact: true,
         path: '/',
-        resolver: (_routeTail, ctx) => {
+        resolver: (ctx) => {
           console.info('ctx:', ctx)
 
           return html`
@@ -131,6 +131,8 @@ class App extends LitElement {
   }
 
   render () {
+    console.info('route:', this.__route)
+
     return html`
       <div class="container">
         <nav class="nav">
@@ -138,6 +140,11 @@ class App extends LitElement {
             class="nav-item"
             href="/"
           >Home</a>
+
+          <a
+            class="nav-item"
+            href="/query?search=123"
+          >Search</a>
 
           <a
             class="nav-item"

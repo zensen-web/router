@@ -46,8 +46,14 @@ function __regexparam (str, loose) {
 }
 /* v8 ignore end */
 
+function __objToQuerystring (obj) {
+  const params = obj && new URLSearchParams(obj)
+
+  return params ? params.toString() : ''
+}
+
 function __isRouteDifferent (routePath, query) {
-  const querystring = __buildQuerystring(query)
+  const querystring = __objToQuerystring(query)
 
   return (
     routePath !== window.location.pathname ||
@@ -71,14 +77,6 @@ function __buildParams (pattern, keys, querylessRoute) {
     }),
     {}
   )
-}
-
-function __buildQuerystring (query) {
-  const params = query && new URLSearchParams(query)
-
-  return params
-    ? params.toString()
-    : window.location.search.substring(1)
 }
 
 function __resolveRoute (pattern, keys, routePath, navItem, data) {
@@ -113,7 +111,7 @@ function __updateCurrentHref () {
 
 function __changeRoute (href, query, operation) {
   const { pathname } = new URL(href)
-  const querystring = __buildQuerystring(query)
+  const querystring = __objToQuerystring(query)
   const full = [pathname, querystring].filter(Boolean).join('?')
 
   const result = window.dispatchEvent(
@@ -130,7 +128,7 @@ function __changeRoute (href, query, operation) {
 
   if (result) {
     const href = [pathname, querystring]
-      .filter(item => item)
+      .filter(Boolean)
       .join('?')
 
     if (operation && operation !== OPERATION.POP) {
@@ -183,7 +181,7 @@ function getSegments () {
   return window.location.pathname.split('/').filter(Boolean)
 }
 
-function navigate (routePath, query = null) {
+function navigate (routePath, query = {}) {
   __validateInitialized()
 
   if (!__isRouteDifferent(routePath, query)) {
@@ -197,7 +195,7 @@ function navigate (routePath, query = null) {
   __changeRoute(href, query, OPERATION.PUSH)
 }
 
-function redirect (routePath, query = null) {
+function redirect (routePath, query = {}) {
   __validateInitialized()
 
   if (!__isRouteDifferent(routePath, query)) {
@@ -211,11 +209,11 @@ function redirect (routePath, query = null) {
   __changeRoute(href, query, OPERATION.REPLACE)
 }
 
-function matchSwitch (items, routePath = null, data = {}) {
+function matchSwitch (items, routePath, data = {}) {
   __validateInitialized()
 
   let result = {}
-  const p = routePath !== null ? routePath.split('?')[0] : getPath()
+  const p = routePath.split('?')[0]
 
   const matchedRoute = items.find(item => {
     const exact = item.exact !== undefined ? item.exact : false
@@ -270,7 +268,10 @@ export function handleAnchorClick(event) {
   event.preventDefault()
 
   if (anchor.href !== window.location.href) {
-    __changeRoute(anchor.href, null, OPERATION.PUSH)
+    const search = new URLSearchParams(anchor.search)
+    const query = Object.fromEntries(search)
+
+    __changeRoute(anchor.href, query, OPERATION.PUSH)
   }
 }
 

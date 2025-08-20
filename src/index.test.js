@@ -66,7 +66,6 @@ beforeEach(() => {
   window.history.replaceState = vi.fn()
 })
 
-
 describe('global events', () => {
   test('when NOT initialized', () => {
     expect(router.isInitialized()).toBe(false)
@@ -494,7 +493,7 @@ describe('global events', () => {
       full: '/users/123',
       pathname: '/users/123',
       operation: 'pushState',
-      query: null,
+      query: {},
     })
 
     expect(cancelEventStub).not.toHaveBeenCalled()
@@ -558,7 +557,7 @@ describe('global events', () => {
       full: '/users/123',
       pathname: '/users/123',
       operation: 'pushState',
-      query: null,
+      query: {},
     })
 
     expect(changeEventStub).not.toHaveBeenCalled()
@@ -568,7 +567,7 @@ describe('global events', () => {
       full: '/users/123',
       pathname: '/users/123',
       operation: 'pushState',
-      query: null,
+      query: {},
     })
 
     expect(window.history.pushState).not.toHaveBeenCalled()
@@ -904,6 +903,8 @@ describe('interface', () => {
     })
 
     test('when invoked with NO query', () => {
+      window.location.search = '?a=foo'
+
       router.navigate('/users/123')
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
@@ -915,7 +916,7 @@ describe('interface', () => {
         full: '/users/123',
         pathname: '/users/123',
         operation: 'pushState',
-        query: null,
+        query: {},
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
@@ -924,13 +925,12 @@ describe('interface', () => {
         full: '/users/123',
         pathname: '/users/123',
         operation: 'pushState',
-        query: null,
+        query: {},
       })
 
       expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).toHaveBeenCalledWith({}, '', '/users/123')
       expect(window.history.replaceState).not.toHaveBeenCalled()
-      expect(window.location.search).toBe('')
     })
 
     test('when invoked WITH query', () => {
@@ -1121,6 +1121,8 @@ describe('interface', () => {
     })
 
     test('when invoked with NO query', () => {
+      window.location.search = '?a=foo'
+
       router.redirect('/users/123')
 
       const changeEventCall = changeEventStub.mock.calls[0][0]
@@ -1132,14 +1134,13 @@ describe('interface', () => {
         full: '/users/123',
         pathname: '/users/123',
         operation: 'replaceState',
-        query: null,
+        query: {},
       })
 
       expect(changeEventStub).toHaveBeenCalledOnce()
       expect(cancelEventStub).not.toHaveBeenCalled()
       expect(window.history.pushState).not.toHaveBeenCalled()
       expect(window.history.replaceState).toHaveBeenCalledWith({}, '', '/users/123')
-      expect(window.location.search).toBe('')
     })
 
     test('when invoked WITH query', () => {
@@ -1198,9 +1199,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/asdf'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/asdf')
 
       expect(result).toBe('')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1224,9 +1223,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users/123'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users/123')
 
       expect(result).toBe('<p>EXPECTED PATH</p>')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1261,9 +1258,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users/123'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users/123')
 
       expect(result).toBe('<p>USERS</p>')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1295,8 +1290,6 @@ describe('interface', () => {
           resolver: vi.fn(() => '<p>USER ID</p>'),
         },
       ]
-
-      window.location.pathname = '/'
 
       const result = router.matchSwitch(NAV_ITEMS, '/users/123')
 
@@ -1334,9 +1327,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users/123'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users/123')
 
       expect(result).toBe('<p>USERS</p>')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1372,9 +1363,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users/123'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users/123')
 
       expect(result).toBe('')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1401,9 +1390,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users')
 
       expect(result).toBe('<p>USERS</p>')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1446,9 +1433,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users')
 
       expect(result).toBe('<p>USERS</p>')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
@@ -1479,9 +1464,7 @@ describe('interface', () => {
         },
       ]
 
-      window.location.pathname = '/users'
-
-      const result = router.matchSwitch(NAV_ITEMS)
+      const result = router.matchSwitch(NAV_ITEMS, '/users')
 
       expect(result).toBe('')
       expect(NAV_ITEMS[0].resolver).not.toHaveBeenCalled()
