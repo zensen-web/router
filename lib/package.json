@@ -1,11 +1,15 @@
 {
   "name": "@zensen/router",
-  "version": "1.1.6",
+  "version": "2.0.0",
   "type": "module",
   "license": "MIT",
   "description": "A declarative router for native web components",
   "author": "Travis True <travis.true08@gmail.com> (http://www.travistrue.io)",
-  "main": "src/index.js",
+  "main": "dist/index.js",
+  "files": [
+    "dist/",
+    "README.md"
+  ],
   "repository": {
     "type": "git",
     "url": "git+https://github.com/zensen/router.git"
@@ -14,8 +18,10 @@
     "access": "public"
   },
   "scripts": {
-    "clean": "rm -rf node_modules",
+    "build": "mkdir -p dist && terser src/index.js -o dist/index.js --compress --mangle --source-map",
+    "clean": "rm -rf node_modules dist",
     "reinstall": "bun run clean && bun install",
+    "prepublishOnly": "bun run build",
     "test": "vitest run --coverage",
     "test:watch": "vitest --coverage"
   },
@@ -33,6 +39,7 @@
     "@zensen/eslint-config": "^1.0.0",
     "eslint": "^5.16.0",
     "jsdom": "^26.1.0",
+    "terser": "^5.16.0",
     "vitest": "^3.2.4"
   }
 }
