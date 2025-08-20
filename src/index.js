@@ -163,7 +163,7 @@ function __changeRoute (href, query, operation) {
   }
 }
 
-function getPath () {
+function getPathname () {
   return window.location.pathname
 }
 
@@ -310,7 +310,7 @@ export default {
   isInitialized,
   initialize,
   shutdown,
-  getPath,
+  getPathname,
   getHash,
   getQuery,
   getSegments,

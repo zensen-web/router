@@ -687,11 +687,11 @@ describe('interface', () => {
     router.shutdown()
   })
 
-  describe('getPath()', () => {
+  describe('getPathname()', () => {
     test('when invoked', () => {
       window.location.pathname = '/users/123'
 
-      expect(router.getPath()).toBe('/users/123')
+      expect(router.getPathname()).toBe('/users/123')
     })
   })
 
